@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#574848"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainLoginClick">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:background="@drawable/background_shape"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/title">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/shr_hint_username">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/shr_hint_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_marginTop="7dp"
+
+            android:gravity="right">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_Cancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:text="@string/shr_button_cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_Login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/shr_button_Login" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't have password ?"
+                android:textStyle="italic">
+
+            </com.google.android.material.textview.MaterialTextView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_SignIn"
+                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Sign in now "
+                android:textStyle="italic">
+
+            </com.google.android.material.textview.MaterialTextView>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

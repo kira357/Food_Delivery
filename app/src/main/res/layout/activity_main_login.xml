@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#574848"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    tools:context=".MainLogin">
+
+    <LinearLayout
+        android:id="@+id/Login"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:background="@drawable/background_shape"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            style="@style/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/title">
+
+        </TextView>
+
+        <android.widget.Button
+            android:id="@+id/btn_Login"
+            style="@style/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:text="Login">
+
+        </android.widget.Button>
+
+        <TextView
+            style="@style/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="OR">
+
+        </TextView>
+
+        <android.widget.Button
+            android:id="@+id/btn_LoginGG"
+            style="@style/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape2"
+            android:text="Sign up with Google">
+
+        </android.widget.Button>
+
+
+        <android.widget.Button
+            android:id="@+id/btn_LoginFB"
+            style="@style/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape3"
+            android:text="Sign up with Facebook">
+
+        </android.widget.Button>
+
+    </LinearLayout>
+
+</LinearLayout>

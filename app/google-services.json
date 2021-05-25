@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "712851655397",
+    "firebase_url": "https://test-5f6d8-default-rtdb.firebaseio.com",
+    "project_id": "test-5f6d8",
+    "storage_bucket": "test-5f6d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712851655397:android:5f8a6ab24c1ab4e352e20c",
+        "android_client_info": {
+          "package_name": "com.mad.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgy2ZPTF_5kb85S9CyEcKfdO11b3zyjmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712851655397:android:2fa1e99af5e603dd52e20c",
+        "android_client_info": {
+          "package_name": "com.trantiendat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712851655397-8m8qofga73vs5vb3j7nu1kv9e6626sap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trantiendat",
+            "certificate_hash": "b44e29a1566dbba8f5fe73940f1209c2c52b55fe"
+          }
+        },
+        {
+          "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgy2ZPTF_5kb85S9CyEcKfdO11b3zyjmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712851655397:android:b43efc3e3fd654ea52e20c",
+        "android_client_info": {
+          "package_name": "com.trantiendat.food_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgy2ZPTF_5kb85S9CyEcKfdO11b3zyjmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712851655397-r6uc7p3d55kqmgq2r9u9ovsaqp0v6i7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
