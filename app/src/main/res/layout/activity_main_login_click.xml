@@ -7,11 +7,11 @@
     android:background="#574848"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
-    tools:context=".MainLoginClick">
+    tools:context=".LoginClickActivity">
 
     <LinearLayout
         android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_height="500dp"
         android:background="@drawable/background_shape"
         android:gravity="center_vertical"
         android:orientation="vertical"
@@ -27,12 +27,14 @@
         </com.google.android.material.textview.MaterialTextView>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Username_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/shr_hint_username">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Username_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -40,14 +42,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_text_input"
+            android:id="@+id/Password_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/shr_hint_password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_edit_text"
+                android:id="@+id/Password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>

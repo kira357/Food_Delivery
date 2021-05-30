@@ -6,7 +6,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,10 +31,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainLogin extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -65,7 +63,7 @@ public class MainLogin extends AppCompatActivity {
         btn_Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainLogin.this, MainLoginClick.class);
+                Intent intent = new Intent(LoginActivity.this, LoginClickActivity.class);
                 startActivity(intent);
             }
         });
@@ -81,7 +79,7 @@ public class MainLogin extends AppCompatActivity {
         btn_LoginFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(MainLogin.this, Arrays.asList("email", "public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
@@ -121,7 +119,7 @@ public class MainLogin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
-                signInIntent = new Intent(MainLogin.this, MainMenu.class);
+                signInIntent = new Intent(LoginActivity.this, MainMenuActivity.class);
                 startActivity(signInIntent);
                 finish();
 
@@ -154,7 +152,7 @@ public class MainLogin extends AppCompatActivity {
 
     private void updateUI() {
         Toast.makeText(this, "Loggin Success", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(MainLogin.this, MainMenu.class);
+        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
         startActivity(intent);
         finish();
     }
@@ -217,7 +215,7 @@ public class MainLogin extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             updateUI();
                         }
                     }

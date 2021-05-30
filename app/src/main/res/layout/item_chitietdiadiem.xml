@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_name2"
+            android:id="@+id/tv_tenMonAn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
@@ -36,8 +36,19 @@
 
         </TextView>
 
+
         <TextView
-            android:id="@+id/tv_address2"
+            android:id="@+id/tv_loaiMonAn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_giaMonAn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="address"
@@ -45,16 +56,6 @@
             android:textSize="20sp">
 
         </TextView>
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/Rating"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Rating"-->
-        <!--            android:textColor="@color/black"-->
-        <!--            android:textSize="20sp">-->
-
-        <!--        </TextView>-->
 
     </LinearLayout>
 

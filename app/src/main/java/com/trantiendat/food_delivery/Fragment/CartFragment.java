@@ -1,4 +1,4 @@
-package com.trantiendat.food_delivery.uri;
+package com.trantiendat.food_delivery.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

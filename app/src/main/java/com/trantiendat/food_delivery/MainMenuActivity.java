@@ -5,24 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.trantiendat.Adapter.ViewPagerAdapter;
-import com.trantiendat.food_delivery.uri.CartFragment;
-import com.trantiendat.food_delivery.uri.FavouriteFragment;
-import com.trantiendat.food_delivery.uri.HomeFragment;
-import com.trantiendat.food_delivery.uri.InfoFragment;
+import com.trantiendat.food_delivery.Fragment.CartFragment;
+import com.trantiendat.food_delivery.Fragment.FavouriteFragment;
+import com.trantiendat.food_delivery.Fragment.HomeFragment;
+import com.trantiendat.food_delivery.Fragment.InfoFragment;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button btn_LogOut;
     private ViewPager mViewPager;
@@ -33,16 +28,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         mAuth = FirebaseAuth.getInstance();
-//        //btn_LogOut = findViewById(R.id.btn_LogOut);
-//        btn_LogOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                LoginManager.getInstance().logOut();
-//                updateUI();
-//            }
-//        });
-//
+
         init();
         setAdapter();
         actionViewPager();
@@ -119,20 +105,5 @@ public class MainMenu extends AppCompatActivity {
         });
     }
 
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            updateUI();
-//        }
-//
-//    }
-//
-//    private void updateUI() {
-//        Toast.makeText(this, "Loggin Success", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(MainMenu.this, MainLogin.class);
-//        startActivity(intent);
-//        finish();
-//    }
+
 }

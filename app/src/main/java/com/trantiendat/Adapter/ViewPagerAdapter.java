@@ -1,17 +1,14 @@
 package com.trantiendat.Adapter;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.trantiendat.food_delivery.uri.CartFragment;
-import com.trantiendat.food_delivery.uri.FavouriteFragment;
-import com.trantiendat.food_delivery.uri.HomeFragment;
-import com.trantiendat.food_delivery.uri.InfoFragment;
+import com.trantiendat.food_delivery.Fragment.CartFragment;
+import com.trantiendat.food_delivery.Fragment.FavouriteFragment;
+import com.trantiendat.food_delivery.Fragment.HomeFragment;
+import com.trantiendat.food_delivery.Fragment.InfoFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 

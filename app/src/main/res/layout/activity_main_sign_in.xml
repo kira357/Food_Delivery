@@ -7,11 +7,11 @@
     android:background="#574848"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
-    tools:context=".MainLoginClick">
+    tools:context=".LoginClickActivity">
 
     <LinearLayout
         android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_height="500dp"
         android:background="@drawable/background_shape"
         android:gravity="center_vertical"
         android:orientation="vertical"
