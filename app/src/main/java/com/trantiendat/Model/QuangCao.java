@@ -22,9 +22,9 @@ public class QuangCao implements Serializable {
     @SerializedName("ID_QuangCao")
     @Expose
     private String iDQuangCao;
-    @SerializedName("HInh_QuangCao")
+    @SerializedName("Hinh_QuangCao")
     @Expose
-    private String hInhQuangCao;
+    private String hinhQuangCao;
     @SerializedName("NoiDung_QuangCao")
     @Expose
     private String noiDungQuangCao;
@@ -69,12 +69,12 @@ public class QuangCao implements Serializable {
         this.iDQuangCao = iDQuangCao;
     }
 
-    public String getHInhQuangCao() {
-        return hInhQuangCao;
+    public String getHinhQuangCao() {
+        return hinhQuangCao;
     }
 
-    public void setHInhQuangCao(String hInhQuangCao) {
-        this.hInhQuangCao = hInhQuangCao;
+    public void setHinhQuangCao(String hinhQuangCao) {
+        this.hinhQuangCao = hinhQuangCao;
     }
 
     public String getNoiDungQuangCao() {

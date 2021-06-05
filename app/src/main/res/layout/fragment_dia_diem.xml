@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.DiaDiemFragment">
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_DiaDiem"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
     </androidx.recyclerview.widget.RecyclerView>

@@ -69,33 +69,49 @@
 //}
 package com.trantiendat.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
+import com.trantiendat.Model.ChiTietDiaDiem;
 import com.trantiendat.Model.DiaDiem;
+import com.trantiendat.Model.MonAn;
+import com.trantiendat.Service.APIService;
+import com.trantiendat.Service.DataService;
 import com.trantiendat.food_delivery.ChiTietDiaDiemActivity;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHolder> {
+
+
     ArrayList<DiaDiem> diaDiemArrayList;
     Context context;
-    private View view;
+    SharedPreferences sharedPreferences;
+
 
     public static int i = 0;
 
-    public LocationAdapter(ArrayList<DiaDiem> diaDiemArrayList, Context context) {
+    public DiaDiemAdapter(ArrayList<DiaDiem> diaDiemArrayList, Context context) {
         this.diaDiemArrayList = diaDiemArrayList;
         this.context = context;
     }
@@ -103,6 +119,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_location, parent, false);
         return new ViewHolder(view);
     }
@@ -113,18 +130,23 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         if (diaDiem == null) {
             return;
         }
-        i = position;
         holder.tv_name.setText(diaDiem.getTenDiaDiem());
         holder.tv_address.setText(diaDiem.getDiaChiDiaDiem());
-        Picasso.get().load(diaDiem.getHinhDiaDiem()).into(holder.imgv_location);
+        Glide.with(context).load(diaDiem.getHinhDiaDiem()).placeholder(R.drawable.loop_black_48x48)
+                .error(R.drawable.error_black_48x48)
+                .into(holder.imgv_location);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int id = Integer.parseInt(diaDiemArrayList.get(position).getIDDiaDiem());
+
                 Intent intent = new Intent(context, ChiTietDiaDiemActivity.class);
-                intent.putExtra("dd", diaDiemArrayList.get(position));
-              //  Log.d("TAG", "onClick: "+ diaDiemArrayList.get(position).getIDDiaDiem());
-        context.startActivity(intent);
+                intent.putExtra("DiaDiem", diaDiemArrayList.get(position));
+                intent.putExtra("pos", id);
+                context.startActivity(intent);
+
+
             }
         });
 
@@ -145,7 +167,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             imgv_location = itemView.findViewById(R.id.imgv_location);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_address = itemView.findViewById(R.id.tv_address);
-
 
         }
     }
