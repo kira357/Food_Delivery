@@ -1,75 +1,57 @@
 package com.trantiendat.Model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class YeuThich {
+    private String id;
+    private String ten;
+    private String diachi;
+    private String hinh;
+    private int favourite;
 
-    @SerializedName("ID_DiaDiem")
-    @Expose
-    private String iDDiaDiem;
-    @SerializedName("Ten_DiaDiem")
-    @Expose
-    private String tenDiaDiem;
-    @SerializedName("Hinh_DiaDiem")
-    @Expose
-    private String hinhDiaDiem;
-    @SerializedName("Diachi_DiaDiem")
-    @Expose
-    private String diachiDiaDiem;
-    @SerializedName("ID_YeuThich")
-    @Expose
-    private String iDYeuThich;
-    @SerializedName("TrangThai")
-    @Expose
-    private String trangThai;
-
-    public String getIDDiaDiem() {
-        return iDDiaDiem;
+    public YeuThich(String id, String ten, String diachi, String hinh, int favourite) {
+        this.id = id;
+        this.ten = ten;
+        this.diachi = diachi;
+        this.hinh = hinh;
+        this.favourite = favourite;
     }
 
-    public void setIDDiaDiem(String iDDiaDiem) {
-        this.iDDiaDiem = iDDiaDiem;
+    public String getId() {
+        return id;
     }
 
-    public String getTenDiaDiem() {
-        return tenDiaDiem;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setTenDiaDiem(String tenDiaDiem) {
-        this.tenDiaDiem = tenDiaDiem;
+    public String getTen() {
+        return ten;
     }
 
-    public String getHinhDiaDiem() {
-        return hinhDiaDiem;
+    public void setTen(String ten) {
+        this.ten = ten;
     }
 
-    public void setHinhDiaDiem(String hinhDiaDiem) {
-        this.hinhDiaDiem = hinhDiaDiem;
+    public String getDiachi() {
+        return diachi;
     }
 
-    public String getDiachiDiaDiem() {
-        return diachiDiaDiem;
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
     }
 
-    public void setDiachiDiaDiem(String diachiDiaDiem) {
-        this.diachiDiaDiem = diachiDiaDiem;
+    public String getHinh() {
+        return hinh;
     }
 
-    public String getIDYeuThich() {
-        return iDYeuThich;
+    public void setHinh(String hinh) {
+        this.hinh = hinh;
     }
 
-    public void setIDYeuThich(String iDYeuThich) {
-        this.iDYeuThich = iDYeuThich;
+    public int getFavourite() {
+        return favourite;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public void setFavourite(int favourite) {
+        this.favourite = favourite;
     }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
-
 }

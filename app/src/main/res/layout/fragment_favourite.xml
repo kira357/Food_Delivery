@@ -13,12 +13,12 @@
         android:layout_height="wrap_content">
     </androidx.appcompat.widget.Toolbar>
 
-    <ListView
-        android:id="@+id/lv_yeuthich"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_yeuthich"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </LinearLayout>

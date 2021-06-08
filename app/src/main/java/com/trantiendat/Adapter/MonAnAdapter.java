@@ -1,13 +1,9 @@
 package com.trantiendat.Adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,13 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
-import com.trantiendat.Model.DiaDiem;
-import com.trantiendat.Model.GioHang;
 import com.trantiendat.Model.MonAn;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
-import com.trantiendat.food_delivery.Fragment.Cart.OrderFragment;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
@@ -35,7 +27,7 @@ import retrofit2.Response;
 public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.viewHolder> {
     Activity context;
     ArrayList<MonAn> monAnArrayList;
-
+    MonAn monAn;
 
     public MonAnAdapter(Activity context, ArrayList<MonAn> monAnArrayList) {
         this.context = context;
@@ -52,7 +44,7 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.viewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MonAnAdapter.viewHolder holder, int position) {
-        MonAn monAn = monAnArrayList.get(position);
+         monAn = monAnArrayList.get(position);
         if (monAn == null) {
             return;
         }
@@ -86,15 +78,15 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.viewHolder> 
             btn_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String SoLuong = "1";
                     DataService dataService = APIService.getService();
-                    Call<String> callback = dataService.insertDatagiohang(monAnArrayList.get(getPosition()).getIDMonAn());
+                    Call<String> callback = dataService.insertDatagiohang(monAnArrayList.get(getPosition()).getIDMonAn(),SoLuong);
                     callback.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
                             String ketqua = response.body();
                             if (ketqua.equals("Success")) {
                                 Toast.makeText(context, "thêm thành công", Toast.LENGTH_SHORT).show();
-
                             } else {
                                 Toast.makeText(context, "Lỗi", Toast.LENGTH_SHORT).show();
                             }
@@ -105,7 +97,6 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.viewHolder> 
 
                         }
                     });
-
                 }
             });
 

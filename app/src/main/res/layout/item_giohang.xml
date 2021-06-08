@@ -8,91 +8,121 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imgv_hinh"
-            android:layout_width="130dp"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"></ImageView>
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_ten"
+            <CheckBox
+                android:id="@+id/cb_chon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:ellipsize="end"
-                android:text="Nameeeeeeeeeeeeeeeeee"
-                android:textSize="20sp"
-                android:textStyle="bold">
+                android:layout_gravity="center" />
 
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_mota"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:text="Nameeeeeeeeeeeeeeeeee"
-                android:textSize="15sp">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_gia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginBottom="48dp"
-                android:text="Nameeeeeeeeeeeeeeeeee"
-                android:textSize="15sp">
-
-            </TextView>
+            <ImageView
+                android:id="@+id/imgv_hinh"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:scaleType="fitXY"></ImageView>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btn_giam"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="20dp"
-                    android:backgroundTint="@color/white"
-                    android:src="@drawable/ic_baseline_indeterminate_check_box_24" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/tv_soluong"
-                    android:layout_width="26dp"
+                    android:id="@+id/tv_ten"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="20sp" />
+                    android:padding="3dp"
+                    android:text="Nameeeeeee"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
-                <ImageButton
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/btn_tang"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                </TextView>
 
-                    android:src="@drawable/ic_baseline_add_box_24" />
+                <TextView
+                    android:id="@+id/tv_diachi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:padding="3dp"
+                    android:text="Nameeeeeeeeeeeeeeeeee"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_gia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="3dp"
+                    android:text="Nameeeeeeeeeeeeeeeeee"
+                    android:textSize="15sp">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btn_giam"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="20dp"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_baseline_indeterminate_check_box_24" />
+
+                    <TextView
+                        android:id="@+id/tv_soluong"
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:textSize="20sp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_tang"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_baseline_add_box_24" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+
         </LinearLayout>
 
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/btn_chot"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:backgroundTint="#D10F0F"-->
+        <!--            android:enabled="false"-->
+        <!--            android:text="Chốt đơn"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="24sp">-->
 
+        <!--        </com.google.android.material.button.MaterialButton>-->
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

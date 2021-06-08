@@ -1,5 +1,6 @@
 package com.trantiendat.Service;
 
+import com.trantiendat.Model.ChiTietHoaDon;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.GioHang;
 import com.trantiendat.Model.MonAn;
@@ -23,6 +24,8 @@ public interface DataService {
     @GET("danhsachgiohang.php")
     Call<List<GioHang>> getDataGioHang();
 
+    @GET("danhsachCTHD.php")
+    Call<List<ChiTietHoaDon>> getDataCTHD();
 
 
     @FormUrlEncoded
@@ -34,14 +37,36 @@ public interface DataService {
     Call<List<MonAn>> getDatadanhsachmonan(@Field("ID_DiaDiem") String ID_DiaDiem);
 
     @FormUrlEncoded
-    @POST("YeuThich.php")
-    Call<String> insertDatayeuthich(@Field("ID_DiaDiem") String ID_DiaDiem ,@Field("TrangThai") String TrangThai);
-
-    @GET("danhsachyeuthich.php")
-    Call<List<YeuThich>> getDataDanhsachyeuthich();
+    @POST("themGioHang.php")
+    Call<String> insertDatagiohang(@Field("ID_MonAn") String ID_MonAn,@Field("SoLuong") String SoLuong);
 
     @FormUrlEncoded
-    @POST("themGioHang.php")
-    Call<String> insertDatagiohang(@Field("ID_MonAn") String ID_MonAn);
+    @POST("CTHD.php")
+    Call<String> insertDataCTHD(@Field("ID_MonAn") String ID_MonAn ,@Field("SoLuong") String SoLuong,@Field("Gia") String Gia,@Field("ThanhTien") String ThanhTien);
 
+    @FormUrlEncoded
+    @POST("suaDon.php")
+    Call<String> updateDatahoadon(@Field("ID_MonAn") String ID_MonAn , @Field("SoLuong") String SoLuong,@Field("ThanhTien") String ThanhTien);
+
+    @FormUrlEncoded
+    @POST("xoaDon.php")
+    Call<String> deleteDatahoadon(@Field("ID_MonAn") String ID_MonAn);
+
+    @FormUrlEncoded
+    @POST("luuHoaDon.php")
+    Call<String> saveDatahoadon(@Field("Tong") Long Tong ,@Field("ID_HoaDon") String ID_HoaDon );
+
+
+    @FormUrlEncoded
+    @POST("taoHoaDon.php")
+    Call<String> taoHoaDon(@Field("Tong_HoaDon") String Tong_HoaDon);
+
+
+    @FormUrlEncoded
+    @POST("themChiTietHoaDon.php")
+    Call<String> insertIDhoadon(@Field("ID_HoaDon") String ID_HoaDon );
+//
+//    @FormUrlEncoded
+//    @POST("taoHoaDon.php")
+//    Call<String> taoHoaDon(@Field("Tong_HoaDon") String Tong_HoaDon);
 }

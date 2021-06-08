@@ -19,9 +19,10 @@ import com.trantiendat.food_delivery.R;
 
 public class CartFragment extends Fragment {
 
-private TabLayout tablayout_Cart;
-private ViewPager viewPager_Cart;
-private View view;
+    private TabLayout tablayout_Cart;
+    private ViewPager viewPager_Cart;
+    private View view;
+    private OrderFragment orderFragment;
 
     public CartFragment() {
         // Required empty public constructor
@@ -39,7 +40,7 @@ private View view;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-         view = inflater.inflate(R.layout.fragment_cart, container, false);
+        view = inflater.inflate(R.layout.fragment_cart, container, false);
         tablayout_Cart = view.findViewById(R.id.tablayout_Cart);
         viewPager_Cart = view.findViewById(R.id.viewpager_Cart);
         CartViewPagerAdapter cartViewPagerAdapter = new CartViewPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -49,8 +50,29 @@ private View view;
 
         return view;
     }
-    public void ReloadView(){
-      
+
+    public void ReloadView() {
+        getFragmentManager().beginTransaction().detach(CartFragment.this).attach(CartFragment.this).commit();
+        tablayout_Cart.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager_Cart.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0 || tab.getPosition() == 1) {
+                    OrderFragment.gioHangAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         Toast.makeText(getActivity(), "Reload pager Cart", Toast.LENGTH_SHORT).show();
     }
 }

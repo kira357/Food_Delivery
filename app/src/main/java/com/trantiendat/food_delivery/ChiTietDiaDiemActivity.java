@@ -5,7 +5,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,9 +12,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +25,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.trantiendat.Adapter.DanhSachDiaDiemAdapter;
 import com.trantiendat.Adapter.MonAnAdapter;
 
+import com.trantiendat.Database.Database;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.MonAn;
 import com.trantiendat.Model.QuangCao;
@@ -59,7 +56,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     QuangCao quangCao;
     SharedPreferences sharedPreferences;
     int pos;
-
+    Database database;
 
 
     @Override
@@ -153,31 +150,6 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         });
     }
 
-    private void insertFavorite(String ID_DiaDiem, String TrangThai) {
-        DataService dataService = APIService.getService();
-        Call<String> callback = dataService.insertDatayeuthich(ID_DiaDiem, TrangThai);
-        callback.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                String ketqua = response.body();
-                if (ketqua.equals("Success")) {
-
-
-                    Toast.makeText(ChiTietDiaDiemActivity.this, "da thich thanh cong", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ChiTietDiaDiemActivity.this, "Loi", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });
-    }
-
-
     private void setToolbar() {
         setSupportActionBar(tb_toolbarquangcao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -192,40 +164,34 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         imgvbtn_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (imgvbtn_like.getTag() == null || imgvbtn_like.getTag() == "unlike") {
-                     imgvbtn_like.setImageResource(R.drawable.like);
+                    imgvbtn_like.setImageResource(R.drawable.like);
                     imgvbtn_like.setTag("like");
                     //saveImage("image",R.drawable.like);
-
-//                    String like = "1";
+                    String like = "1";
 //                    insertFavorite(diaDiem.getIDDiaDiem(), like);
+
+                    database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+                    database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                            "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+                    database.QueryData("INSERT INTO YeuThich VALUES('"+diaDiem.getIDDiaDiem()+"', '"+diaDiem.getTenDiaDiem()+"'," +
+                            " '"+diaDiem.getDiaChiDiaDiem()+"', '"+diaDiem.getHinhDiaDiem()+ "', '"+like+ "')");
+
+                    Toast.makeText(ChiTietDiaDiemActivity.this, "Lưu dữ liệu vào bàn: "+diaDiem.getTenDiaDiem()+"", Toast.LENGTH_SHORT).show();
+                    //check();
 
                 } else {
                     imgvbtn_like.setImageResource(R.drawable.unlike);
                     imgvbtn_like.setTag("unlike");
+                    database.QueryData("DELETE FROM YeuThich WHERE ID= "+diaDiem.getIDDiaDiem());
+                    Toast.makeText(ChiTietDiaDiemActivity.this, "đã bỏ lưu", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
         collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-
     }
-
-//    public int getImage(String item){
-//        SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
-//        final int rsId = getResources().getIdentifier("like", "drawable", this.getPackageName());
-//        int id = pref.getInt(item,rsId);
-//        return id;
-//    }
-//
-//    public void saveImage(String item, int resourceId){
-//        SharedPreferences starterSP = this.getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor edit = starterSP.edit();
-//        edit.putInt(item, resourceId);
-//        edit.apply();
-//    }
 
     private void DataIntent() {
         Intent intent = getIntent();

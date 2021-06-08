@@ -23,6 +23,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private BottomNavigationView bottomNavigationView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

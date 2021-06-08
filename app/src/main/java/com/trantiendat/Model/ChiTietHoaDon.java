@@ -5,27 +5,35 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-
-public class GioHang implements Serializable {
+public class ChiTietHoaDon implements Serializable {
 
     @SerializedName("ID_MonAn")
     @Expose
     private String iDMonAn;
-    @SerializedName("Hinh_MonAn")
-    @Expose
-    private String hinhMonAn;
     @SerializedName("Ten_MonAn")
     @Expose
     private String tenMonAn;
+    @SerializedName("Hinh_MonAn")
+    @Expose
+    private String hinhMonAn;
+    @SerializedName("ID_DiaDiem")
+    @Expose
+    private String iDDiaDiem;
+    @SerializedName("Ten_DiaDiem")
+    @Expose
+    private String tenDiaDiem;
     @SerializedName("DiaChi_DiaDiem")
     @Expose
     private String diaChiDiaDiem;
-    @SerializedName("Gia_MonAn")
+    @SerializedName("Gia")
     @Expose
-    private String giaMonAn;
+    private String gia;
     @SerializedName("SoLuong")
     @Expose
     private String soLuong;
+    @SerializedName("ThanhTien")
+    @Expose
+    private String thanhTien;
 
     public String getIDMonAn() {
         return iDMonAn;
@@ -33,14 +41,6 @@ public class GioHang implements Serializable {
 
     public void setIDMonAn(String iDMonAn) {
         this.iDMonAn = iDMonAn;
-    }
-
-    public String getHinhMonAn() {
-        return hinhMonAn;
-    }
-
-    public void setHinhMonAn(String hinhMonAn) {
-        this.hinhMonAn = hinhMonAn;
     }
 
     public String getTenMonAn() {
@@ -51,6 +51,30 @@ public class GioHang implements Serializable {
         this.tenMonAn = tenMonAn;
     }
 
+    public String getHinhMonAn() {
+        return hinhMonAn;
+    }
+
+    public void setHinhMonAn(String hinhMonAn) {
+        this.hinhMonAn = hinhMonAn;
+    }
+
+    public String getIDDiaDiem() {
+        return iDDiaDiem;
+    }
+
+    public void setIDDiaDiem(String iDDiaDiem) {
+        this.iDDiaDiem = iDDiaDiem;
+    }
+
+    public String getTenDiaDiem() {
+        return tenDiaDiem;
+    }
+
+    public void setTenDiaDiem(String tenDiaDiem) {
+        this.tenDiaDiem = tenDiaDiem;
+    }
+
     public String getDiaChiDiaDiem() {
         return diaChiDiaDiem;
     }
@@ -59,12 +83,12 @@ public class GioHang implements Serializable {
         this.diaChiDiaDiem = diaChiDiaDiem;
     }
 
-    public String getGiaMonAn() {
-        return giaMonAn;
+    public String getGia() {
+        return gia;
     }
 
-    public void setGiaMonAn(String giaMonAn) {
-        this.giaMonAn = giaMonAn;
+    public void setGia(String gia) {
+        this.gia = gia;
     }
 
     public String getSoLuong() {
@@ -73,6 +97,14 @@ public class GioHang implements Serializable {
 
     public void setSoLuong(String soLuong) {
         this.soLuong = soLuong;
+    }
+
+    public String getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(String thanhTien) {
+        this.thanhTien = thanhTien;
     }
 
 }
