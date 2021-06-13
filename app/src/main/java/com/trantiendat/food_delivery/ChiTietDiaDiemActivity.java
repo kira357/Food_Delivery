@@ -1,5 +1,6 @@
 package com.trantiendat.food_delivery;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +25,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.trantiendat.Adapter.Bottomsheet;
 import com.trantiendat.Adapter.DanhSachDiaDiemAdapter;
 import com.trantiendat.Adapter.MonAnAdapter;
 
@@ -29,6 +34,7 @@ import com.trantiendat.Database.Database;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.MonAn;
 import com.trantiendat.Model.QuangCao;
+import com.trantiendat.Model.YeuThich;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 
@@ -41,22 +47,23 @@ import retrofit2.Response;
 
 public class ChiTietDiaDiemActivity extends AppCompatActivity {
 
-    ArrayList<MonAn> monAnArrayList;
-    ArrayList<DiaDiem> diaDiemArrayList;
-    TextView tv_diachi;
-    CoordinatorLayout coordinatorLayout;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    Toolbar tb_toolbarquangcao;
-    ImageButton imgvbtn_like;
-    RecyclerView rcv_danhsachmonan;
-    ImageView img_DiaDiem;
-    DanhSachDiaDiemAdapter danhSachDiaDiemAdapter;
-    MonAnAdapter monAnAdapter;
-    DiaDiem diaDiem;
-    QuangCao quangCao;
-    SharedPreferences sharedPreferences;
+    private ArrayList<MonAn> monAnArrayList;
+    private ArrayList<DiaDiem> diaDiemArrayList;
+    private TextView tv_diachi;
+    private CoordinatorLayout coordinatorLayout;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Toolbar toolbar_back;
+    private ImageButton imgvbtn_like, imgvbtn_Dislike;
+    private RecyclerView rcv_danhsachmonan;
+    private ImageView img_DiaDiem, imgv_bottom;
+    private DanhSachDiaDiemAdapter danhSachDiaDiemAdapter;
+    private MonAnAdapter monAnAdapter;
+    private DiaDiem diaDiem;
+    private QuangCao quangCao;
+    private FrameLayout layoutFrame;
+    private Database database;
+    String like = "1";
     int pos;
-    Database database;
 
 
     @Override
@@ -70,7 +77,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         DataIntent();
         setToolbar();
         CheckData();
-
+        showBottomSheet();
 
     }
 
@@ -78,10 +85,14 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         coordinatorLayout = findViewById(R.id.coordinator);
         collapsingToolbarLayout = findViewById(R.id.collapsingtoolbar);
         rcv_danhsachmonan = findViewById(R.id.rcv_danhsachmonan);
-        tb_toolbarquangcao = findViewById(R.id.toolbar_danhsachmonan);
+        toolbar_back = findViewById(R.id.toolbar_back);
         img_DiaDiem = findViewById(R.id.img_DiaDiem);
         imgvbtn_like = findViewById(R.id.imgvbtn_like);
+        imgvbtn_Dislike = findViewById(R.id.imgvbtn_Dislike);
         tv_diachi = findViewById(R.id.tv_diachiDiaDiem);
+        layoutFrame = findViewById(R.id.layoutFrame);
+        imgv_bottom = findViewById(R.id.imgv_bottom);
+
 
     }
 
@@ -97,7 +108,6 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     }
 
     private void setValueInView(String ten, String hinh) {
-        collapsingToolbarLayout.setTitle(ten);
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(this).load(hinh).into(imageView);
@@ -151,46 +161,68 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        setSupportActionBar(tb_toolbarquangcao);
+        setSupportActionBar(toolbar_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        tb_toolbarquangcao.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar_back.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
 
             }
         });
+        database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+        database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+        String sql = "SELECT * FROM YeuThich";
+        boolean check = false;
+        Cursor cursor = database.GetData(sql);
+        String trangthai = "1";
+        while (cursor.moveToNext()) {
+            if (diaDiem.getIDDiaDiem().equals(cursor.getString(0)) && trangthai.equals(cursor.getString(4))) ;
+            check = true;
+            break;
+        }
+        if (check) {
+            imgvbtn_like.setVisibility(View.VISIBLE);
+            imgvbtn_Dislike.setVisibility(View.INVISIBLE);
+
+        } else {
+            imgvbtn_like.setVisibility(View.INVISIBLE);
+            imgvbtn_Dislike.setVisibility(View.VISIBLE);
+
+        }
 
         imgvbtn_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imgvbtn_like.getTag() == null || imgvbtn_like.getTag() == "unlike") {
-                    imgvbtn_like.setImageResource(R.drawable.like);
-                    imgvbtn_like.setTag("like");
-                    //saveImage("image",R.drawable.like);
-                    String like = "1";
-//                    insertFavorite(diaDiem.getIDDiaDiem(), like);
 
-                    database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
-                    database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
-                            "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
-                    database.QueryData("INSERT INTO YeuThich VALUES('"+diaDiem.getIDDiaDiem()+"', '"+diaDiem.getTenDiaDiem()+"'," +
-                            " '"+diaDiem.getDiaChiDiaDiem()+"', '"+diaDiem.getHinhDiaDiem()+ "', '"+like+ "')");
+                database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+                database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                        "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+                database.QueryData("DELETE FROM YeuThich WHERE ID= " + diaDiem.getIDDiaDiem());
+                imgvbtn_like.setVisibility(View.INVISIBLE);
+                imgvbtn_Dislike.setVisibility(View.VISIBLE);
+                Toast.makeText(ChiTietDiaDiemActivity.this, "đã bỏ lưu", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(ChiTietDiaDiemActivity.this, "Lưu dữ liệu vào bàn: "+diaDiem.getTenDiaDiem()+"", Toast.LENGTH_SHORT).show();
-                    //check();
+            }
+        });
+        imgvbtn_Dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+                database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                        "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+                database.QueryData("INSERT INTO YeuThich VALUES('" + diaDiem.getIDDiaDiem() + "', '" + diaDiem.getTenDiaDiem() + "'," +
+                        " '" + diaDiem.getDiaChiDiaDiem() + "', '" + diaDiem.getHinhDiaDiem() + "', '" + like + "')");
 
-                } else {
-                    imgvbtn_like.setImageResource(R.drawable.unlike);
-                    imgvbtn_like.setTag("unlike");
-                    database.QueryData("DELETE FROM YeuThich WHERE ID= "+diaDiem.getIDDiaDiem());
-                    Toast.makeText(ChiTietDiaDiemActivity.this, "đã bỏ lưu", Toast.LENGTH_SHORT).show();
-
-                }
+                imgvbtn_like.setVisibility(View.VISIBLE);
+                imgvbtn_Dislike.setVisibility(View.INVISIBLE);
+                Toast.makeText(ChiTietDiaDiemActivity.this, "Đã thêm vào danh sách yêu thích: " + diaDiem.getTenDiaDiem() + "", Toast.LENGTH_SHORT).show();
             }
         });
         collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+
     }
 
     private void DataIntent() {
@@ -207,6 +239,22 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void showBottomSheet() {
+        imgv_bottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickOpenBottom();
+            }
+        });
+    }
+
+
+    private void clickOpenBottom() {
+        Bottomsheet bottomsheet = Bottomsheet.getInstance(diaDiem);
+        bottomsheet.show(getSupportFragmentManager(), bottomsheet.getTag());
+        bottomsheet.setCancelable(false);
     }
 
 

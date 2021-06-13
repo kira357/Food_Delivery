@@ -8,16 +8,19 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.trantiendat.Adapter.DiaDiemAdapter;
 import com.trantiendat.Database.PaginationScrollListener;
 import com.trantiendat.Model.DiaDiem;
+import com.trantiendat.NetworkCheck.ConnectionReceiver;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.food_delivery.R;
@@ -35,6 +38,7 @@ public class DiaDiemFragment extends Fragment {
     private RecyclerView rcv_DiaDiem;
     private ArrayList<DiaDiem> diaDiemArrayList;
     private DiaDiemAdapter diaDiemAdapter;
+    private TextView tvNetworkFailHome;
     DiaDiem diaDiem;
     View view;
 
@@ -54,8 +58,19 @@ public class DiaDiemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_dia_diem, container, false);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!ConnectionReceiver.isConnected()) {
+                    tvNetworkFailHome.setVisibility(View.VISIBLE);
+                } else {
+                    tvNetworkFailHome.setVisibility(View.GONE);
+                }
+                handler.postDelayed(this, 2000);
+            }
+        }, 1000);
         init();
-        //GetDataDiaDiem();
         Threads threads = new Threads();
         threads.execute();
         return view;
@@ -63,6 +78,7 @@ public class DiaDiemFragment extends Fragment {
 
     private void init() {
         rcv_DiaDiem = view.findViewById(R.id.rcv_DiaDiem);
+        tvNetworkFailHome =view.findViewById(R.id.tvNetworkFailHome);
 
     }
 

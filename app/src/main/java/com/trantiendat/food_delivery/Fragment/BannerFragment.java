@@ -33,9 +33,8 @@ public class BannerFragment extends Fragment {
     ViewPager viewPager;
     CircleIndicator circleIndicator;
     View view;
-    DiaDiem diaDiem;
-    Runnable runnable;
-    Handler handler;
+    int currentItem;
+    int pager = 0;
 
     public BannerFragment() {
         // Required empty public constructor
@@ -50,11 +49,13 @@ public class BannerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getFragmentManager().beginTransaction().detach(BannerFragment.this).attach(BannerFragment.this).commit();
         view = inflater.inflate(R.layout.fragment_banner, container, false);
         init();
-        Threads thread = new Threads();
-        thread.execute();
+        GetDataQuangCao();
+        updateQuangCao();
         return view;
+
     }
 
     private void init() {
@@ -62,50 +63,41 @@ public class BannerFragment extends Fragment {
         circleIndicator = view.findViewById(R.id.cid_loadQuangCao);
     }
 
-    int currentItem ;
 
-    class Threads extends AsyncTask<Void, Void, Void> {
-        private void GetDataQuangCao() {
-            DataService dataService = APIService.getService();
-            Call<List<QuangCao>> callback = dataService.getDataQuangCao();
-            callback.enqueue(new Callback<List<QuangCao>>() {
-                @Override
-                public void onResponse(Call<List<QuangCao>> call, Response<List<QuangCao>> response) {
-                    quangCaoArrayList = (ArrayList<QuangCao>) response.body();
-                    quangCaoAdapter = new QuangCaoAdapter(getActivity(), quangCaoArrayList);
-                    viewPager.setAdapter(quangCaoAdapter);
-                    circleIndicator.setViewPager(viewPager);
-                    handler = new Handler();
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            currentItem = viewPager.getCurrentItem();
-                            currentItem++;
-                            if (currentItem >= viewPager.getAdapter().getCount()) {
-                                currentItem = 0;
-                            }
-                            viewPager.setCurrentItem(currentItem, true);
-                            handler.postDelayed(runnable, 4500);
-                        }
-                    };
-                    handler.postDelayed(runnable, 4500);
+    private void GetDataQuangCao() {
+        DataService dataService = APIService.getService();
+        Call<List<QuangCao>> callback = dataService.getDataQuangCao();
+        callback.enqueue(new Callback<List<QuangCao>>() {
+            @Override
+            public void onResponse(Call<List<QuangCao>> call, Response<List<QuangCao>> response) {
+                quangCaoArrayList = (ArrayList<QuangCao>) response.body();
+                quangCaoAdapter = new QuangCaoAdapter(getActivity(), quangCaoArrayList);
+                viewPager.setAdapter(quangCaoAdapter);
+                circleIndicator.setViewPager(viewPager);
+                pager = quangCaoArrayList.size();
+            }
+
+            @Override
+            public void onFailure(Call<List<QuangCao>> call, Throwable t) {
+                pager = 0;
+            }
+        });
+
+    }
+
+    private void updateQuangCao() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                currentItem = viewPager.getCurrentItem();
+                currentItem++;
+                if (currentItem >= pager) {
+                    currentItem = 0;
                 }
-                @Override
-                public void onFailure(Call<List<QuangCao>> call, Throwable t) {
-
-                }
-            });
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            GetDataQuangCao();
-
-            return null;
-        }
-
-
-
+                viewPager.setCurrentItem(currentItem, true);
+                handler.postDelayed(this, 4500);
+            }
+        }, 4500);
     }
 }

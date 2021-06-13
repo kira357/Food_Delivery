@@ -1,6 +1,7 @@
 package com.trantiendat.food_delivery.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.facebook.login.LoginManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import com.trantiendat.food_delivery.LoginActivity;
 import com.trantiendat.food_delivery.R;
 
@@ -22,6 +24,7 @@ public class InfoFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     View view;
+    SharedPreferences sharedPreferences ;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -56,6 +59,12 @@ public class InfoFragment extends Fragment {
 
                 mAuth.signOut();
                 LoginManager.getInstance().logOut();
+                sharedPreferences = getActivity().getSharedPreferences("User", getActivity().MODE_PRIVATE);
+//                SessionManagement sessionManagement = new SessionManagement(getActivity());
+//                sessionManagement.removeSession();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getResources().getString(R.string.SHARE),"log_out");
+                editor.commit();
                 updateUI();
             }
         });
@@ -76,6 +85,7 @@ public class InfoFragment extends Fragment {
     private void updateUI() {
         Toast.makeText(getActivity(), "Log out Success", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         getActivity().finish();
     }

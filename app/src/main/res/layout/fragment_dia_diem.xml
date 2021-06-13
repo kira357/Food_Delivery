@@ -6,6 +6,17 @@
     android:orientation="vertical"
     tools:context=".Fragment.DiaDiemFragment">
 
+    <TextView
+        android:id="@+id/tvNetworkFailHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="#C1C33D25"
+        android:gravity="center"
+        android:text="Không có kết nối mạng"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
 
 
     <androidx.recyclerview.widget.RecyclerView

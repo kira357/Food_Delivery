@@ -47,8 +47,8 @@ public class FavouriteFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_favourite, container, false);
         init();
         //GetDataDiaDiem();
-        addViews();
         PrepareDB();
+        addViews();
         loadData();
         return view;
     }

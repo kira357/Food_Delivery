@@ -33,7 +33,6 @@ import retrofit2.Response;
 public class QuangCaoAdapter extends PagerAdapter {
     Context context;
     ArrayList<QuangCao> quangCaoArrayList;
-    ArrayList<DiaDiem> diaDiemArrayList;
 
     public QuangCaoAdapter(Context context, ArrayList<QuangCao> quangCaoArrayList) {
         this.context = context;

@@ -175,25 +175,65 @@
 //
 package com.trantiendat.food_delivery.Fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
+import android.provider.Settings;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.trantiendat.Model.DiaDiem;
+import com.trantiendat.Service.APIService;
+import com.trantiendat.Service.DataService;
+import com.trantiendat.food_delivery.HoaDonActivity;
+import com.trantiendat.food_delivery.MainActivity;
+import com.trantiendat.food_delivery.MainMenuActivity;
 import com.trantiendat.food_delivery.R;
+import com.trantiendat.food_delivery.TimKiemActivity;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import me.relex.circleindicator.CircleIndicator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
+    private static final int REQUEST_CODE_LOCATION = 1;
     ViewPager viewPager;
-    CircleIndicator circleIndicator;
     View view;
+    TextView tv_vitri;
+    SearchView sv_TimKiem;
+    DiaDiem diaDiem;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
 
     public HomeFragment() {
@@ -210,22 +250,94 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        //init();
-
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        requestPermissionLocation();
+        init();
+        TimKiem();
         return view;
     }
 
     private void init() {
+        sv_TimKiem = view.findViewById(R.id.sv_TimKiem);
+        tv_vitri = view.findViewById(R.id.tv_vitri);
+    }
+
+    private void TimKiem() {
+        sv_TimKiem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TimKiemActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void ReloadView() {
+
+        getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
         Toast.makeText(getActivity(), "Reload pager home", Toast.LENGTH_SHORT).show();
 
     }
 
+    private void openSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
+    }
 
+    public void requestPermissionLocation() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getActivity(), "Premission granted", Toast.LENGTH_SHORT).show();
+            getLocation();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(), "Premission grandted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Premission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if (location != null) {
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(
+                                location.getLatitude(), location.getLongitude(), 1);
+                        tv_vitri.setText(addresses.get(0).getAddressLine(0));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Location null", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
 }
 

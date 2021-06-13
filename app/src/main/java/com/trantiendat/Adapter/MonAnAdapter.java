@@ -36,14 +36,14 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.viewHolder> 
 
     @NonNull
     @Override
-    public MonAnAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_monan, parent, false);
-        return new MonAnAdapter.viewHolder(view);
+        return new viewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MonAnAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
          monAn = monAnArrayList.get(position);
         if (monAn == null) {
             return;

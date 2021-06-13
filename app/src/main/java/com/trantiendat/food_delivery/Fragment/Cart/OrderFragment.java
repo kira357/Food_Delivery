@@ -77,7 +77,28 @@ public class OrderFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            gioHangArrayList.remove(viewHolder.getAdapterPosition());
+            int position = viewHolder.getAdapterPosition();
+            String checkid ;
+            checkid = gioHangArrayList.get(position).getIDMonAn();
+            gioHangArrayList.remove(position);
+
+            DataService dataService = APIService.getService();
+            Call<String> callback = dataService.xoaGioHang(checkid);
+            callback.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    String ketqua = response.body();
+                    if(ketqua.equals("Success")){
+                        Toast.makeText(getActivity(), "đã xoá thành công", Toast.LENGTH_SHORT).show();
+                    }else
+                    Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+
+                }
+            });
             gioHangAdapter.notifyDataSetChanged();
         }
     };

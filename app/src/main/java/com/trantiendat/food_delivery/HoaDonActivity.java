@@ -5,7 +5,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +22,7 @@ import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.food_delivery.Fragment.Cart.PayFragment;
+import com.trantiendat.food_delivery.Fragment.CartFragment;
 import com.trantiendat.food_delivery.Fragment.DiaDiemFragment;
 import com.trantiendat.food_delivery.Fragment.HomeFragment;
 
@@ -35,14 +39,15 @@ public class HoaDonActivity extends AppCompatActivity {
     Button btn_thanhtoan;
     RecyclerView rcv_cthd;
     ArrayList<ChiTietHoaDon> chiTietHoaDonArrayList;
-    ChiTietHoaDonAdapter donAdapter;
     ChiTietHoaDonAdapter chiTietHoaDonAdapter;
-    String id ;
+    String id;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
+        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         init();
         DataIntent();
         getDataCTHD();
@@ -76,30 +81,51 @@ public class HoaDonActivity extends AppCompatActivity {
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 tv_tong.setText(decimalFormat.format(tong) + "Đ");
 
+
                 long finalTong = tong;
                 btn_thanhtoan.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        DataService dataService = APIService.getService();
-                        Call<String> callback = dataService.saveDatahoadon(finalTong,id);
-                        callback.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                String ketqua = response.body();
-                                if (ketqua.equals("Success")) {
-                                    Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
+                        String loginStatus = sharedPreferences.getString(getResources().getString(R.string.SHARE), "");
+                        if (loginStatus.equals("log_in")) {
+//                            DataService dataService = APIService.getService();
+//                            Call<String> callback = dataService.saveDatahoadon(finalTong,id);
+//                            callback.enqueue(new Callback<String>() {
+//                                @Override
+//                                public void onResponse(Call<String> call, Response<String> response) {
+//                                    String ketqua = response.body();
+//                                    if (ketqua.equals("Success")) {
+//                                        Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
+//
+//                                    } else {
+//                                        Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<String> call, Throwable t) {
+//
+//                                }
+//                            });
+                            startActivity(new Intent(HoaDonActivity.this, MainMenuActivity.class));
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HoaDonActivity.this);
+                            builder.setMessage("Vui lòng đăng nhập trước khi thanh toán")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            startActivity(new Intent(HoaDonActivity.this, LoginActivity.class));
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            builder.create().show();
 
-                                } else {
-                                    Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                        }
 
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-
-                            }
-                        });
-                        onBackPressed();
                     }
                 });
 
@@ -111,6 +137,7 @@ public class HoaDonActivity extends AppCompatActivity {
             }
         });
     }
+
     private void DataIntent() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -119,5 +146,6 @@ public class HoaDonActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

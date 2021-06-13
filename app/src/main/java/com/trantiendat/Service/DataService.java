@@ -65,8 +65,20 @@ public interface DataService {
     @FormUrlEncoded
     @POST("themChiTietHoaDon.php")
     Call<String> insertIDhoadon(@Field("ID_HoaDon") String ID_HoaDon );
-//
-//    @FormUrlEncoded
-//    @POST("taoHoaDon.php")
-//    Call<String> taoHoaDon(@Field("Tong_HoaDon") String Tong_HoaDon);
+
+    @FormUrlEncoded
+    @POST("XoaGioHang.php")
+    Call<String> xoaGioHang(@Field("ID_MonAn") String ID_MonAn);
+
+    @FormUrlEncoded
+    @POST("Timkiem.php")
+    Call<List<DiaDiem>> getDataSearch(@Field("Key") String Key);
+
+    @FormUrlEncoded
+    @POST("DangKi.php")
+    Call<String> DangKi(@Field("user") String user,@Field("password") String password,@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("DangNhap.php")
+    Call<String> DangNhap(@Field("user") String user,@Field("password") String password);
 }

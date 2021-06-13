@@ -29,7 +29,7 @@
                 android:background="@drawable/background_custom"></View>
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_danhsachmonan"
+                android:id="@+id/toolbar_back"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:elevation="6dp"
@@ -44,14 +44,24 @@
                 android:layout_height="match_parent">
 
             </ImageView>
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <ImageButton
         android:id="@+id/imgvbtn_like"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/imagebuttoncustom"
+        android:src="@drawable/like"
+        app:layout_anchor="@id/appbarlayout"
+        app:layout_anchorGravity="bottom|right"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+    </ImageButton>
+
+    <ImageButton
+        android:id="@+id/imgvbtn_Dislike"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/imagebuttoncustom"
@@ -63,6 +73,7 @@
     </ImageButton>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/Nested"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp"
@@ -75,4 +86,23 @@
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/layoutFrame"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/custom_bottom"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:id="@+id/imgv_bottom"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_remove_24">
+
+        </ImageView>
+    </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

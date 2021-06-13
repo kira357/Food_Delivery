@@ -8,9 +8,10 @@
     <string name="shr_button_Login"> Login </string>
     <string name="shr_button_Signin"> Sign in </string>
     <string name="shr_button_cancel"> Cancel </string>
-    <string name="shr_error_password"> wrong password </string>
+    <string name="shr_error_password">  Password is empty</string>
     <string name="facebook_app_id">2259813527483149</string>
     <string name="fb_login_protocol_scheme">fb2259813527483149</string>
+    <string name="map_api_key">AIzaSyDnixNN5PERph2banplmVWnaupVgWVjYyw</string>
     <string name="Home">Home</string>
     <string name="Favourite">Favourite</string>
     <string name="Cart">Shopping cart</string>
@@ -18,5 +19,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">name</string>
+    <string name="SHARE">Login</string>
 
 </resources>
