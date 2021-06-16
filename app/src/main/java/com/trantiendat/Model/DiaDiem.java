@@ -21,6 +21,12 @@ public class DiaDiem implements Serializable {
     @SerializedName("DiaChi_DiaDiem")
     @Expose
     private String diaChiDiaDiem;
+    @SerializedName("Rating_DiaDiem")
+    @Expose
+    private String ratingDiaDiem;
+    @SerializedName("TrangThai")
+    @Expose
+    private String trangThai;
 
     public String getIDDiaDiem() {
         return iDDiaDiem;
@@ -52,6 +58,22 @@ public class DiaDiem implements Serializable {
 
     public void setDiaChiDiaDiem(String diaChiDiaDiem) {
         this.diaChiDiaDiem = diaChiDiaDiem;
+    }
+
+    public String getRatingDiaDiem() {
+        return ratingDiaDiem;
+    }
+
+    public void setRatingDiaDiem(String ratingDiaDiem) {
+        this.ratingDiaDiem = ratingDiaDiem;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 
 }

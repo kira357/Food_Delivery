@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.trantiendat.food_delivery">
 
 
@@ -11,7 +12,6 @@
 
     <application
         android:name="com.trantiendat.NetworkCheck.WifiApp"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -21,17 +21,18 @@
 
         <activity android:name=".TimKiemActivity" />
         <activity android:name=".HoaDonActivity" >
+
+        </activity>
+        <activity android:name=".ChiTietDiaDiemActivity" />
+        <activity android:name=".MainSignInActivity" >
+
+        </activity>
+        <activity android:name=".LoginClickActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ChiTietDiaDiemActivity" />
-        <activity android:name=".MainSignInActivity" >
-        </activity>
-        <activity android:name=".LoginClickActivity" >
-
         </activity>
         <activity android:name=".MainMenuActivity">
 
@@ -70,7 +71,8 @@
 
         <receiver android:name="com.trantiendat.NetworkCheck.ConnectionReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
     </application>

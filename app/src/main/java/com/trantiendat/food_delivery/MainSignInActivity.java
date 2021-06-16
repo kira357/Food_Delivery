@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -66,7 +67,7 @@ public class MainSignInActivity extends AppCompatActivity {
                 String password = Password_edit_text.getText().toString();
                 String email = Email_edit_text.getText().toString();
                 String password2 = password_again_edit_text.getText().toString();
-                if (user.equals("") || password.equals("") || email.equals("") || password2.equals("")) {
+                if (user.equals("") || password.equals("") || email.equals("") || password2.equals("") || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(MainSignInActivity.this, "Bạn cần phải nhập đầy đủ", Toast.LENGTH_SHORT).show();
                 }
                 if (password2.equals(password)) {
@@ -147,6 +148,10 @@ public class MainSignInActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 String ketqua = response.body();
                 if (ketqua.equals("Success")) {
+                    Intent intent = new Intent(MainSignInActivity.this, LoginClickActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                     Toast.makeText(MainSignInActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainSignInActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();

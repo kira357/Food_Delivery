@@ -53,15 +53,36 @@
 
         </TextView>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/Rating"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Rating"-->
-        <!--            android:textColor="@color/black"-->
-        <!--            android:textSize="20sp">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|left"
+            android:orientation="horizontal">
 
-        <!--        </TextView>-->
+            <ImageView
+                android:id="@+id/imgv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_baseline_star_rate_24">
+
+            </ImageView>
+
+            <TextView
+
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:text="Rating"
+                android:textColor="@color/black"
+                android:textSize="15sp">
+
+            </TextView>
+        </LinearLayout>
+
 
     </LinearLayout>
 

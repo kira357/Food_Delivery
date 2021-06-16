@@ -127,18 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void showAcount() {
-        mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (mGoogleSignInAccount != null) {
-            String name = mGoogleSignInAccount.getDisplayName();
-            String GivenName = mGoogleSignInAccount.getGivenName();
-            String FamilyName = mGoogleSignInAccount.getFamilyName();
-            String Email = mGoogleSignInAccount.getEmail();
-            String Id = mGoogleSignInAccount.getId();
-            Uri photo = mGoogleSignInAccount.getPhotoUrl();
-            Toast.makeText(this, name + Email + Id, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void onStart() {
@@ -209,12 +197,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "success");
+                            Log.d("TAG", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "failure", task.getException());
+                            Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             updateUI();
                         }

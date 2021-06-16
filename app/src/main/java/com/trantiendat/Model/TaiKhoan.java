@@ -4,7 +4,9 @@ package com.trantiendat.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TaiKhoan {
+import java.io.Serializable;
+
+public class TaiKhoan implements Serializable {
 
     @SerializedName("ID_TaiKhoan")
     @Expose
@@ -18,6 +20,17 @@ public class TaiKhoan {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("ID_User")
+    @Expose
+    private String iDUser;
+
+    public String getiDUser() {
+        return iDUser;
+    }
+
+    public void setiDUser(String iDUser) {
+        this.iDUser = iDUser;
+    }
 
     public TaiKhoan(String user, String password) {
         this.user = user;
@@ -26,6 +39,12 @@ public class TaiKhoan {
 
     public TaiKhoan(String iDTaiKhoan) {
         this.iDTaiKhoan = iDTaiKhoan;
+    }
+
+    public TaiKhoan(String iDTaiKhoan, String user, String email) {
+        this.iDTaiKhoan = iDTaiKhoan;
+        this.user = user;
+        this.email = email;
     }
 
     public String getIDTaiKhoan() {

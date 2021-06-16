@@ -23,6 +23,7 @@ import com.trantiendat.Model.GioHang;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.food_delivery.HoaDonActivity;
+import com.trantiendat.food_delivery.MainActivity;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class OrderFragment extends Fragment {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            String checkid ;
+            String checkid;
             checkid = gioHangArrayList.get(position).getIDMonAn();
             gioHangArrayList.remove(position);
 
@@ -88,10 +89,10 @@ public class OrderFragment extends Fragment {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     String ketqua = response.body();
-                    if(ketqua.equals("Success")){
+                    if (ketqua.equals("Success")) {
                         Toast.makeText(getActivity(), "đã xoá thành công", Toast.LENGTH_SHORT).show();
-                    }else
-                    Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -110,7 +111,6 @@ public class OrderFragment extends Fragment {
             @Override
             public void onResponse(Call<List<GioHang>> call, Response<List<GioHang>> response) {
 
-
                 gioHangArrayList = new ArrayList<>();
                 gioHangArrayList = (ArrayList<GioHang>) response.body();
                 gioHangAdapter = new GioHangAdapter(gioHangArrayList, getActivity());
@@ -123,39 +123,41 @@ public class OrderFragment extends Fragment {
                 btn_chot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String tong = "0";
-                        Call<String> callback = dataService.taoHoaDon(tong);
-                        callback.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                String id = response.body();
-                                if (Integer.parseInt(id) > 0) {
-                                    Call<String> callback = dataService.insertIDhoadon(id);
-                                    callback.enqueue(new Callback<String>() {
-                                        @Override
-                                        public void onResponse(Call<String> call, Response<String> response) {
-                                            String ketqua = response.body();
-                                            Toast.makeText(getActivity(), "đã tạo hoá đơn" + ketqua, Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getActivity(), HoaDonActivity.class);
-                                            intent.putExtra("id", ketqua);
-                                            startActivity(intent);
-                                        }
+                        if (MainActivity.gioHangArrayList.size() > 0) {
+                            String tong = "0";
+                            Call<String> callback = dataService.taoHoaDon(tong);
+                            callback.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    String id = response.body();
+                                    if (Integer.parseInt(id) > 0) {
+                                        Call<String> callback = dataService.insertIDhoadon(id);
+                                        callback.enqueue(new Callback<String>() {
+                                            @Override
+                                            public void onResponse(Call<String> call, Response<String> response) {
+                                                String ketqua = response.body();
+                                                Toast.makeText(getActivity(), "đã tạo hoá đơn" + ketqua, Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getActivity(), HoaDonActivity.class);
+                                                intent.putExtra("id", ketqua);
+                                                startActivity(intent);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<String> call, Throwable t) {
+                                            @Override
+                                            public void onFailure(Call<String> call, Throwable t) {
 
-                                        }
-                                    });
+                                            }
+                                        });
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
 
-                            }
-                        });
-
-
+                                }
+                            });
+                        } else {
+                            MainActivity.gioHangArrayList.add(new GioHang("0", "", "", "", "", ""));
+                        }
                     }
                 });
 
@@ -168,6 +170,7 @@ public class OrderFragment extends Fragment {
         });
     }
 
+
     public void setRCV() {
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         rcv_Order.addItemDecoration(decoration);
@@ -178,6 +181,5 @@ public class OrderFragment extends Fragment {
 
         Toast.makeText(getActivity(), "Reload pager Order", Toast.LENGTH_SHORT).show();
     }
-
 
 }

@@ -27,6 +27,15 @@ public class GioHang implements Serializable {
     @Expose
     private String soLuong;
 
+    public GioHang(String iDMonAn, String hinhMonAn, String tenMonAn, String diaChiDiaDiem, String giaMonAn, String soLuong) {
+        this.iDMonAn = iDMonAn;
+        this.hinhMonAn = hinhMonAn;
+        this.tenMonAn = tenMonAn;
+        this.diaChiDiaDiem = diaChiDiaDiem;
+        this.giaMonAn = giaMonAn;
+        this.soLuong = soLuong;
+    }
+
     public String getIDMonAn() {
         return iDMonAn;
     }

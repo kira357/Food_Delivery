@@ -293,7 +293,7 @@ public class HomeFragment extends Fragment {
             return;
         }
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity(), "Premission granted", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "Premission granted", Toast.LENGTH_SHORT).show();
             getLocation();
         } else {
             ActivityCompat.requestPermissions(getActivity(),

@@ -5,8 +5,12 @@ import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.GioHang;
 import com.trantiendat.Model.MonAn;
 import com.trantiendat.Model.QuangCao;
+import com.trantiendat.Model.TaiKhoan;
+import com.trantiendat.Model.User;
 import com.trantiendat.Model.YeuThich;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,6 +31,9 @@ public interface DataService {
     @GET("danhsachCTHD.php")
     Call<List<ChiTietHoaDon>> getDataCTHD();
 
+
+    @GET("danhsachyeuthich.php")
+    Call<List<DiaDiem>> getDataYeuThich();
 
     @FormUrlEncoded
     @POST("chitietquangcao.php")
@@ -80,5 +87,10 @@ public interface DataService {
 
     @FormUrlEncoded
     @POST("DangNhap.php")
-    Call<String> DangNhap(@Field("user") String user,@Field("password") String password);
+    Call<ArrayList<User>> DangNhap(@Field("user") String user, @Field("password") String password);
+
+
+    @FormUrlEncoded
+    @POST("suaYeuThich.php")
+    Call<String> suaYeuThich(@Field("ID_DiaDiem") String ID_DiaDiem,@Field("TrangThai") int TrangThai);
 }

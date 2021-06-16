@@ -32,7 +32,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
     Context context;
 
 
-
     public GioHangAdapter(ArrayList<GioHang> gioHangArrayList, Context context) {
         this.gioHangArrayList = gioHangArrayList;
         this.context = context;
@@ -63,7 +62,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-
+                    holder.tv_soluong.setText(gioHang.getSoLuong());
                     DataService dataService = APIService.getService();
                     Call<String> callback = dataService.insertDataCTHD(gioHang.getIDMonAn(), gioHang.getSoLuong(), gioHang.getGiaMonAn(), gioHang.getGiaMonAn());
                     callback.enqueue(new Callback<String>() {
@@ -149,7 +148,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
                                     holder.btn_giam.setEnabled(false);
                                 }
                             } else {
-                                holder.tv_soluong.setText("0");
+                                holder.tv_soluong.setText(gioHang.getSoLuong());
                                 Call<String> callback = dataService.deleteDatahoadon(gioHang.getIDMonAn());
                                 callback.enqueue(new Callback<String>() {
                                     @Override
@@ -172,6 +171,8 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
                     });
 
                 } else {
+                    holder.btn_giam.setEnabled(false);
+                    holder.btn_tang.setEnabled(false);
                     holder.tv_gia.setText(gioHang.getGiaMonAn());
                     holder.tv_soluong.setText("");
                     DataService dataService = APIService.getService();
@@ -221,7 +222,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
             btn_tang = itemView.findViewById(R.id.btn_tang);
 
             // btn_chot = itemView.findViewById(R.id.btn_chot);
-            imgv_hinh = itemView.findViewById(R.id.imgv_hinh);
+            imgv_hinh = itemView.findViewById(R.id.imgv_anh);
 
 
         }

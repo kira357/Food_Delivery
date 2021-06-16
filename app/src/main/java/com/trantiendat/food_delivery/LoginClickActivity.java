@@ -5,20 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.trantiendat.Model.TaiKhoan;
+import com.trantiendat.Model.ChiTietHoaDon;
+import com.trantiendat.Model.User;
 import com.trantiendat.Service.API;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
+import com.trantiendat.direction.SessionManagement;
 
 import java.util.ArrayList;
 
@@ -27,46 +36,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginClickActivity extends AppCompatActivity {
-    private Button btn_Login, btn_Cancel;
+    private static final String LIST = "CTHD";
+    private MaterialButton btn_LoginUser, btn_Cancel;
     private TextInputLayout Username_text_input, Password_text_input;
     private TextInputEditText Username_edit_text, Password_edit_text;
     private CheckBox ckb_rememberPass;
-    SharedPreferences sharedPreferences;
-    String ketqua;
-    TaiKhoan taiKhoan;
+    SessionManagement sessionManagement;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login_click);
-        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
 
-        getSaveDate();
+        sessionManagement = new SessionManagement(getApplication());
+        CheckLogin();
         init();
-        checkText();
+        Asyn asyn = new Asyn();
+        asyn.execute();
         setEvent();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        CheckSession();
-//
-//    }
-
-//    private void CheckSession() {
-//        SessionManagement sessionManagement = new SessionManagement(LoginClickActivity.this);
-//        String isLogin = sessionManagement.getSession();
-//        if(isLogin != "Fail"){
-//            // move to menu
-//            moveToMenu();
-//        }else {
-//            return;
-//        }
-//    }
-
     private void init() {
-        btn_Login = findViewById(R.id.btn_Login);
+        btn_LoginUser = findViewById(R.id.btn_LoginUser);
         btn_Cancel = findViewById(R.id.btn_Cancel);
         Username_text_input = findViewById(R.id.Username_text_input);
         Username_edit_text = findViewById(R.id.Username_edit_text);
@@ -75,104 +67,134 @@ public class LoginClickActivity extends AppCompatActivity {
         ckb_rememberPass = findViewById(R.id.ckb_rememberPass);
     }
 
-    private boolean isPasswordValid(@Nullable Editable text) {
-        return text != null && text.length() >= 5;
-    }
-
-    private boolean isUserValid(@Nullable Editable text) {
-        return text != null && text.length() >= 4;
-    }
 
     private void setEvent() {
-
-        btn_Login.setOnClickListener(new View.OnClickListener() {
+        btn_LoginUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    TaiKhoan taiKhoan = new TaiKhoan(user, password);
-//                    SessionManagement sessionManagement = new SessionManagement(LoginClickActivity.this);
-//                    sessionManagement.saveSession(taiKhoan);
-//                    moveToMenu();
                 String user = Username_edit_text.getText().toString();
                 String password = Password_edit_text.getText().toString();
                 if (user.equals("") || password.equals("")) {
                     Toast.makeText(LoginClickActivity.this, "Vui lòng nhập đầy đủ ", Toast.LENGTH_SHORT).show();
                 } else {
                     Login(user, password);
+
                 }
+            }
+        });
+        btn_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
-    }
-
-    private void checkText() {
-        Username_edit_text.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (!isUserValid(Username_edit_text.getText())) {
-                    Username_text_input.setError("wrong name");
-                } else {
-                    Username_text_input.setError(null); // Clear the error
-                }
-                if (isPasswordValid(Username_edit_text.getText())) {
-                    Username_text_input.setError(null); //Clear the error
-                }
-                return false;
-            }
-        });
-        Password_edit_text.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (!isPasswordValid(Password_edit_text.getText())) {
-                    Password_text_input.setError("wrong password");
-                } else {
-                    Password_text_input.setError(null); // Clear the error
-                }
-                if (isPasswordValid(Password_edit_text.getText())) {
-                    Password_text_input.setError(null); //Clear the error
-                }
-                return false;
-            }
-        });
     }
 
     private void Login(String user, String password) {
         DataService dataService = APIService.getService();
-        Call<String> callback = dataService.DangNhap(user, password);
-        callback.enqueue(new Callback<String>() {
+        Call<ArrayList<User>> callback = dataService.DangNhap(user, password);
+        callback.enqueue(new Callback<ArrayList<User>>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                ketqua = response.body();
-                if (ketqua.equals(user)) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                ArrayList<User> userArrayList = response.body();
+                if (userArrayList != null) {
                     if (ckb_rememberPass.isChecked()) {
-                        editor.putString(getResources().getString(R.string.SHARE), "log_in");
-
-
+                        for(int i = 0 ; i < userArrayList.size() ; i ++){
+                            User userInfo = userArrayList.get(i);
+                        sessionManagement.saveUser(userInfo);
+                        }
+                        sessionManagement.saveSession(true);
+                        Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     } else {
-                        editor.putString(getResources().getString(R.string.SHARE), "log_out");
-
+                        for(int i = 0 ; i < userArrayList.size() ; i ++){
+                            User userInfo = userArrayList.get(i);
+                            sessionManagement.saveUser(userInfo);
+                        }
+                        sessionManagement.saveSession(false);
+                        Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
-                    editor.commit();
-                    Intent intent = new Intent(LoginClickActivity.this, HoaDonActivity.class);
-                    intent.putExtra("use",ketqua);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginClickActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginClickActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(LoginClickActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
                 }
+                Toast.makeText(LoginClickActivity.this, "vui long kiem tra lai mat khau", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
+            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                Toast t1 = Toast.makeText(LoginClickActivity.this, "Vui lòng kiểm tra kết nối mạng", Toast.LENGTH_SHORT);
+                t1.setGravity(Gravity.CENTER,0,0);
+                t1.show();
             }
         });
     }
 
-    private void getSaveDate() {
-        String loginStatus = sharedPreferences.getString(getResources().getString(R.string.SHARE), "");
-
-        if (loginStatus.equals("log_in")) {
-            startActivity(new Intent(LoginClickActivity.this, MainMenuActivity.class));
+    private void CheckLogin() {
+        if (!sessionManagement.Check()) {
+            Toast.makeText(this, "vui Long dang nhap", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
     }
+
+    public class Asyn extends AsyncTask {
+        private boolean isPasswordValid(@Nullable Editable text) {
+            return text != null && text.length() >= 5;
+        }
+
+        private boolean isUserValid(@Nullable Editable text) {
+            return text != null && text.length() >= 4;
+        }
+
+        private void checkText() {
+            Username_edit_text.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (!isUserValid(Username_edit_text.getText())) {
+                        Username_text_input.setError("wrong name");
+                    } else {
+                        Username_text_input.setError(null); // Clear the error
+                    }
+                    if (isPasswordValid(Username_edit_text.getText())) {
+                        Username_text_input.setError(null); //Clear the error
+                    }
+                    return false;
+                }
+            });
+            Password_edit_text.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (!isPasswordValid(Password_edit_text.getText())) {
+                        Password_text_input.setError("wrong password");
+                    } else {
+                        Password_text_input.setError(null); // Clear the error
+                    }
+                    if (isPasswordValid(Password_edit_text.getText())) {
+                        Password_text_input.setError(null); //Clear the error
+                    }
+                    return false;
+                }
+            });
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            checkText();
+            return null;
+        }
+    }
+
 }

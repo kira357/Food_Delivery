@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class Bottomsheet extends BottomSheetDialogFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, TaskLoadedCallback {
+public class Bottomsheet extends BottomSheetDialogFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
     private static final String KEY = "DiaDiem";
     private DiaDiem diaDiem;
     private TextView tv_tenbottom, tv_diachibottom;
@@ -205,21 +205,21 @@ public class Bottomsheet extends BottomSheetDialogFragment implements OnMapReady
         return googleDirectionsUrl.toString();
     }
 
-    private void Direction() {
-        btn_direction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Object[] data = new Object[3];
-                String url = getDirectionsUrl();
-                GetDirectionsData getDirectionsData = new GetDirectionsData();
-                data[0] = maps;
-                data[1] = url;
-                data[2] = new LatLng(latLng.latitude, latLng.longitude);
-                getDirectionsData.execute(data);
-            }
-        });
-
-    }
+//    private void Direction() {
+//        btn_direction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Object[] data = new Object[3];
+//                String url = getDirectionsUrl();
+//                GetDirectionsData getDirectionsData = new GetDirectionsData();
+//                data[0] = maps;
+//                data[1] = url;
+//                data[2] = new LatLng(latLng.latitude, latLng.longitude);
+//                getDirectionsData.execute(data);
+//            }
+//        });
+//
+//    }
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
@@ -227,12 +227,12 @@ public class Bottomsheet extends BottomSheetDialogFragment implements OnMapReady
         return false;
     }
 
-    @Override
-    public void onTaskDone(Object... values) {
-        if (currentPolyline != null) {
-            currentPolyline.remove();
-            currentPolyline = maps.addPolyline((PolylineOptions) values[0]);
-        }
-    }
+//    @Override
+//    public void onTaskDone(Object... values) {
+//        if (currentPolyline != null) {
+//            currentPolyline.remove();
+//            currentPolyline = maps.addPolyline((PolylineOptions) values[0]);
+//        }
+//    }
 }
 

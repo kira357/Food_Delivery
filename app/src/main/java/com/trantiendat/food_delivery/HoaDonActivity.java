@@ -1,5 +1,6 @@
 package com.trantiendat.food_delivery;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
+import com.trantiendat.direction.SessionManagement;
 import com.trantiendat.food_delivery.Fragment.Cart.PayFragment;
 import com.trantiendat.food_delivery.Fragment.CartFragment;
 import com.trantiendat.food_delivery.Fragment.DiaDiemFragment;
@@ -41,15 +45,19 @@ public class HoaDonActivity extends AppCompatActivity {
     ArrayList<ChiTietHoaDon> chiTietHoaDonArrayList;
     ChiTietHoaDonAdapter chiTietHoaDonAdapter;
     String id;
-    SharedPreferences sharedPreferences;
+    String id_user;
+    SessionManagement sessionManagement;
+    ChiTietHoaDon chiTietHoaDon;
+    public static String LIST = "CTHD";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
-        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-        init();
+        sessionManagement = new SessionManagement(this);
         DataIntent();
+        init();
         getDataCTHD();
 
     }
@@ -57,8 +65,8 @@ public class HoaDonActivity extends AppCompatActivity {
     private void init() {
         rcv_cthd = findViewById(R.id.rcv_cthd);
         tv_tong = findViewById(R.id.tv_tong);
-
         btn_thanhtoan = findViewById(R.id.btn_thanhtoan);
+
     }
 
     private void getDataCTHD() {
@@ -73,7 +81,7 @@ public class HoaDonActivity extends AppCompatActivity {
                 rcv_cthd.setHasFixedSize(true);
                 rcv_cthd.setAdapter(chiTietHoaDonAdapter);
                 chiTietHoaDonAdapter.notifyDataSetChanged();
-
+                DataIntent();
                 long tong = 0;
                 for (int i = 0; i < chiTietHoaDonArrayList.size(); i++) {
                     tong += (Long.parseLong(chiTietHoaDonArrayList.get(i).getThanhTien()));
@@ -83,38 +91,41 @@ public class HoaDonActivity extends AppCompatActivity {
 
 
                 long finalTong = tong;
-                btn_thanhtoan.setOnClickListener(new View.OnClickListener() {
 
+                btn_thanhtoan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String loginStatus = sharedPreferences.getString(getResources().getString(R.string.SHARE), "");
-                        if (loginStatus.equals("log_in")) {
-//                            DataService dataService = APIService.getService();
-//                            Call<String> callback = dataService.saveDatahoadon(finalTong,id);
-//                            callback.enqueue(new Callback<String>() {
-//                                @Override
-//                                public void onResponse(Call<String> call, Response<String> response) {
-//                                    String ketqua = response.body();
-//                                    if (ketqua.equals("Success")) {
-//                                        Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
-//
-//                                    } else {
-//                                        Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<String> call, Throwable t) {
-//
-//                                }
-//                            });
+
+                        if (sessionManagement.Check()) {
+                            DataService dataService = APIService.getService();
+                            Call<String> callback = dataService.saveDatahoadon(finalTong, id);
+                            callback.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    String ketqua = response.body();
+                                    if (ketqua.equals("Success")) {
+                                        Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+
+                                }
+
+                            });
+
                             startActivity(new Intent(HoaDonActivity.this, MainMenuActivity.class));
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(HoaDonActivity.this);
                             builder.setMessage("Vui lòng đăng nhập trước khi thanh toán")
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            startActivity(new Intent(HoaDonActivity.this, LoginActivity.class));
+                                            Intent intent = new Intent(HoaDonActivity.this, LoginActivity.class);
+                                            intent.putParcelableArrayListExtra(LIST, chiTietHoaDonArrayList);
+                                            startActivity(intent);
                                         }
                                     })
                                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -144,8 +155,16 @@ public class HoaDonActivity extends AppCompatActivity {
             if (intent.hasExtra("id")) {
                 id = intent.getStringExtra("id");
             }
+            if (intent.hasExtra("id_user")) {
+                id_user = intent.getStringExtra("id_user");
+            }
+//            if (intent.hasExtra(LIST)) {
+//                chiTietHoaDonArrayList = intent.getParcelableArrayListExtra(LIST);
+//                for (int i = 0; i < chiTietHoaDonArrayList.size(); i++) {
+//                    ChiTietHoaDon chiTietHoaDon = chiTietHoaDonArrayList.get(i);
+//                    Log.d("TAG", "DataIntent: " + chiTietHoaDon.getTenDiaDiem());
+//                }
+            }
+
         }
     }
-
-
-}

@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -174,15 +175,15 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
                 "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
         String sql = "SELECT * FROM YeuThich";
-        boolean check = false;
+        boolean like = false;
         Cursor cursor = database.GetData(sql);
-        String trangthai = "1";
         while (cursor.moveToNext()) {
-            if (diaDiem.getIDDiaDiem().equals(cursor.getString(0)) && trangthai.equals(cursor.getString(4))) ;
-            check = true;
-            break;
+            if (diaDiem.getIDDiaDiem().equals(cursor.getString(0))) {
+                like = true;
+                break;
+            }
         }
-        if (check) {
+        if (like) {
             imgvbtn_like.setVisibility(View.VISIBLE);
             imgvbtn_Dislike.setVisibility(View.INVISIBLE);
 
@@ -195,28 +196,67 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         imgvbtn_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DataService dataService = APIService.getService();
+                Call<String> callback = dataService.suaYeuThich(diaDiem.getIDDiaDiem(), -1);
+                callback.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        String ketqua = response.body();
+                        if (ketqua.equals("Success")) {
+                            imgvbtn_like.setVisibility(View.INVISIBLE);
+                            imgvbtn_Dislike.setVisibility(View.VISIBLE);
+                            database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+                            database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                                    "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+                            database.QueryData("DELETE FROM YeuThich WHERE ID= " + diaDiem.getIDDiaDiem());
+                            Toast t = Toast.makeText(ChiTietDiaDiemActivity.this, "đã bỏ lưu", Toast.LENGTH_SHORT);
+                            t.setGravity(Gravity.CENTER,0,0);
+                            t.show();
+                        }
+                    }
 
-                database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
-                database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
-                        "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
-                database.QueryData("DELETE FROM YeuThich WHERE ID= " + diaDiem.getIDDiaDiem());
-                imgvbtn_like.setVisibility(View.INVISIBLE);
-                imgvbtn_Dislike.setVisibility(View.VISIBLE);
-                Toast.makeText(ChiTietDiaDiemActivity.this, "đã bỏ lưu", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast t1 = Toast.makeText(ChiTietDiaDiemActivity.this, "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                        t1.setGravity(Gravity.CENTER, 0, 0);
+                        t1.show();
+                    }
+                });
+
 
             }
         });
         imgvbtn_Dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
-                database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
-                        "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
-                database.QueryData("INSERT INTO YeuThich VALUES('" + diaDiem.getIDDiaDiem() + "', '" + diaDiem.getTenDiaDiem() + "'," +
-                        " '" + diaDiem.getDiaChiDiaDiem() + "', '" + diaDiem.getHinhDiaDiem() + "', '" + like + "')");
+                DataService dataService = APIService.getService();
+                Call<String> callback = dataService.suaYeuThich(diaDiem.getIDDiaDiem(),1);
+                callback.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        String ketqua = response.body();
+                        if(ketqua.equals("Success")){
+                            imgvbtn_like.setVisibility(View.VISIBLE);
+                            imgvbtn_Dislike.setVisibility(View.INVISIBLE);
+                            database = new Database(ChiTietDiaDiemActivity.this, "YeuThich.sqlite", null, 1);
+                            database.QueryData("CREATE TABLE IF NOT EXISTS YeuThich(ID INTEGER PRIMARY KEY, " +
+                                    "Ten TEXT, " + "diachi TEXT, " + "hinh TEXT," + "trangthai INTEGER)");
+                            database.QueryData("INSERT INTO YeuThich VALUES('" + diaDiem.getIDDiaDiem() + "', '" + diaDiem.getTenDiaDiem() + "'," +
+                                    " '" + diaDiem.getDiaChiDiaDiem() + "', '" + diaDiem.getHinhDiaDiem() + "', '" + diaDiem.getTrangThai() + "')");
+                            Toast t = Toast.makeText(ChiTietDiaDiemActivity.this, "Đã thêm " + diaDiem.getTenDiaDiem() + " vào danh sach", Toast.LENGTH_SHORT);
+                            t.setGravity(Gravity.CENTER, 0, 0);
+                            t.show();
+                        }
+                    }
 
-                imgvbtn_like.setVisibility(View.VISIBLE);
-                imgvbtn_Dislike.setVisibility(View.INVISIBLE);
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast t1 = Toast.makeText(ChiTietDiaDiemActivity.this, "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                        t1.setGravity(Gravity.CENTER, 0, 0);
+                        t1.show();
+                    }
+                });
+
                 Toast.makeText(ChiTietDiaDiemActivity.this, "Đã thêm vào danh sách yêu thích: " + diaDiem.getTenDiaDiem() + "", Toast.LENGTH_SHORT).show();
             }
         });

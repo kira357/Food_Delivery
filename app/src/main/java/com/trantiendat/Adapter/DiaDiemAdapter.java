@@ -106,7 +106,7 @@ public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHold
 
     ArrayList<DiaDiem> diaDiemArrayList;
     Context context;
-    SharedPreferences sharedPreferences;
+
 
 
     public static int i = 0;
@@ -132,6 +132,7 @@ public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHold
         }
         holder.tv_name.setText(diaDiem.getTenDiaDiem());
         holder.tv_address.setText(diaDiem.getDiaChiDiaDiem());
+        holder.tv_rating.setText(diaDiem.getRatingDiaDiem());
         Glide.with(context).load(diaDiem.getHinhDiaDiem()).placeholder(R.drawable.loop_black_48x48)
                 .error(R.drawable.error_black_48x48)
                 .into(holder.imgv_location);
@@ -158,8 +159,8 @@ public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imgv_location;
-        private TextView tv_name, tv_address;
+        private ImageView imgv_location,imgv_rating;
+        private TextView tv_name, tv_address,tv_rating;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -167,6 +168,8 @@ public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHold
             imgv_location = itemView.findViewById(R.id.imgv_location);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_address = itemView.findViewById(R.id.tv_address);
+            tv_rating = itemView.findViewById(R.id.tv_rating);
+            imgv_rating = itemView.findViewById(R.id.imgv_rating);
 
         }
     }
