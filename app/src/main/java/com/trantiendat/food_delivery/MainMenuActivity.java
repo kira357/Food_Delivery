@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.trantiendat.Adapter.ViewPagerAdapter;
@@ -29,7 +30,6 @@ import com.trantiendat.food_delivery.Fragment.InfoFragment;
 public class MainMenuActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_LOCATION = 1;
     private FirebaseAuth mAuth;
-    private Button btn_LogOut;
     private ViewPager mViewPager;
     private BottomNavigationView bottomNavigationView;
 

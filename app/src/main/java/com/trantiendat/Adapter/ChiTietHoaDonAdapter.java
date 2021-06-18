@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.trantiendat.Model.ChiTietHoaDon;
 import com.trantiendat.food_delivery.R;
 

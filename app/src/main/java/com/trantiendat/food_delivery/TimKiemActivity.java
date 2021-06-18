@@ -115,6 +115,7 @@ public class TimKiemActivity extends AppCompatActivity {
     private void setToolbar() {
         setSupportActionBar(toolbar_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_back.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

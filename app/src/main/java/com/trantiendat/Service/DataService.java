@@ -3,6 +3,7 @@ package com.trantiendat.Service;
 import com.trantiendat.Model.ChiTietHoaDon;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.GioHang;
+import com.trantiendat.Model.HoaDon;
 import com.trantiendat.Model.MonAn;
 import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Model.TaiKhoan;
@@ -36,6 +37,10 @@ public interface DataService {
     Call<List<DiaDiem>> getDataYeuThich();
 
     @FormUrlEncoded
+    @POST("danhsachhoadon.php")
+    Call<List<HoaDon>> getDataDanhsachhoadon(@Field("ID_User") String ID_user);
+
+    @FormUrlEncoded
     @POST("chitietquangcao.php")
     Call<List<DiaDiem>> getDataChitietquangcao(@Field("ID_QuangCao") String ID_QuangCao);
 
@@ -66,7 +71,7 @@ public interface DataService {
 
     @FormUrlEncoded
     @POST("taoHoaDon.php")
-    Call<String> taoHoaDon(@Field("Tong_HoaDon") String Tong_HoaDon);
+    Call<String> taoHoaDon(@Field("Tong_HoaDon") String Tong_HoaDon,@Field("ID_User") String ID_User);
 
 
     @FormUrlEncoded
@@ -86,6 +91,10 @@ public interface DataService {
     Call<String> DangKi(@Field("user") String user,@Field("password") String password,@Field("email") String email);
 
     @FormUrlEncoded
+    @POST("suaUser.php")
+    Call<String> updateDataUser(@Field("ID_User") String ID_User , @Field("Ten") String Ten,@Field("Diachi") String Diachi);
+
+    @FormUrlEncoded
     @POST("DangNhap.php")
     Call<ArrayList<User>> DangNhap(@Field("user") String user, @Field("password") String password);
 
@@ -93,4 +102,6 @@ public interface DataService {
     @FormUrlEncoded
     @POST("suaYeuThich.php")
     Call<String> suaYeuThich(@Field("ID_DiaDiem") String ID_DiaDiem,@Field("TrangThai") int TrangThai);
+
+
 }

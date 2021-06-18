@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,11 +32,23 @@
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
 
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/imgv_anhEdit"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/like">
+
+            </ImageView>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:padding="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
 
@@ -71,6 +84,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">

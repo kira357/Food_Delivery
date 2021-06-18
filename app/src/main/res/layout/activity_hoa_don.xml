@@ -4,59 +4,73 @@
     android:layout_height="match_parent">
 
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_cthd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_cthd"
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng tiền: "
+                android:textColor="@color/black"
+                android:textSize="20sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_tong"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="giá: "
+                android:textColor="@color/black"
+                android:textSize="20sp">
 
-            </androidx.recyclerview.widget.RecyclerView>
+            </TextView>
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
+        <LinearLayout
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tổng tiền: "
-                    android:textColor="@color/black"
-                    android:textSize="20sp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" android:background="#D61212">
 
-                </TextView>
-
-                <TextView
-                    android:id="@+id/tv_tong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="giá: "
-                    android:textColor="@color/black"
-                    android:textSize="20sp">
-
-                </TextView>
-            </LinearLayout>
+            <ImageButton
+                android:backgroundTint="#D61212"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_baseline_payment_24"></ImageButton>
 
             <Button
                 android:id="@+id/btn_thanhtoan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#DC1D1D"
-                android:text="Thanh Toán"
+                android:layout_height="50dp"
+                android:backgroundTint="#D61212"
+                android:text="Payment"
                 android:textSize="24sp">
 
             </Button>
         </LinearLayout>
 
+    </LinearLayout>
 
 
 </ScrollView>

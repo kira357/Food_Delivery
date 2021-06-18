@@ -10,9 +10,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.trantiendat.Adapter.YeuThichApdapter;
 import com.trantiendat.Database.Database;
@@ -34,7 +36,6 @@ public class FavouriteFragment extends Fragment {
     RecyclerView rcv_yeuthich;
 
     ArrayList<DiaDiem> diaDiemArrayList;
-    YeuThich yeuThich;
     View view;
     YeuThichApdapter yeuThichAdapter;
     Database database;
@@ -115,12 +116,16 @@ public class FavouriteFragment extends Fragment {
                 rcv_yeuthich.setHasFixedSize(true);
                 new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcv_yeuthich);
                 rcv_yeuthich.setAdapter(yeuThichAdapter);
+
+                RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+                rcv_yeuthich.addItemDecoration(decoration);
             }
 
             @Override
             public void onFailure(Call<List<DiaDiem>> call, Throwable t) {
 
             }
+
         });
 
     }

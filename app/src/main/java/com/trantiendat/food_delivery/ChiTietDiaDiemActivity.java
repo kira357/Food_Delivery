@@ -49,7 +49,6 @@ import retrofit2.Response;
 public class ChiTietDiaDiemActivity extends AppCompatActivity {
 
     private ArrayList<MonAn> monAnArrayList;
-    private ArrayList<DiaDiem> diaDiemArrayList;
     private TextView tv_diachi;
     private CoordinatorLayout coordinatorLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -57,7 +56,6 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     private ImageButton imgvbtn_like, imgvbtn_Dislike;
     private RecyclerView rcv_danhsachmonan;
     private ImageView img_DiaDiem, imgv_bottom;
-    private DanhSachDiaDiemAdapter danhSachDiaDiemAdapter;
     private MonAnAdapter monAnAdapter;
     private DiaDiem diaDiem;
     private QuangCao quangCao;
@@ -94,14 +92,10 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         layoutFrame = findViewById(R.id.layoutFrame);
         imgv_bottom = findViewById(R.id.imgv_bottom);
 
-
     }
 
     private void CheckData() {
-        if (quangCao != null && !quangCao.getNoiDungQuangCao().equals("")) {
-            setValueInView(quangCao.getNoiDungQuangCao(), quangCao.getHinhQuangCao());
-            getDataQuangCao(quangCao.getIDQuangCao());
-        }
+
         if (diaDiem != null && !diaDiem.getTenDiaDiem().equals("")) {
             setValueInView(diaDiem.getTenDiaDiem(), diaDiem.getHinhDiaDiem());
             getDataMonAn(diaDiem.getIDDiaDiem());
@@ -121,26 +115,6 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
 
     }
 
-    private void getDataQuangCao(String ID_QuangCao) {
-        DataService dataService = APIService.getService();
-        Call<List<DiaDiem>> callback = dataService.getDataChitietquangcao(ID_QuangCao);
-        callback.enqueue(new Callback<List<DiaDiem>>() {
-            @Override
-            public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
-                diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
-                danhSachDiaDiemAdapter = new DanhSachDiaDiemAdapter(ChiTietDiaDiemActivity.this, diaDiemArrayList);
-                rcv_danhsachmonan.setLayoutManager(new LinearLayoutManager(ChiTietDiaDiemActivity.this));
-                rcv_danhsachmonan.setHasFixedSize(true);
-                rcv_danhsachmonan.setAdapter(danhSachDiaDiemAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<DiaDiem>> call, Throwable t) {
-
-            }
-        });
-    }
-
     private void getDataMonAn(String ID_DiaDiem) {
         DataService dataService = APIService.getService();
         Call<List<MonAn>> callback = dataService.getDatadanhsachmonan(ID_DiaDiem);
@@ -156,7 +130,9 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<MonAn>> call, Throwable t) {
-
+                Toast t1 = Toast.makeText(ChiTietDiaDiemActivity.this, "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                t1.setGravity(Gravity.CENTER, 0, 0);
+                t1.show();
             }
         });
     }
@@ -164,6 +140,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     private void setToolbar() {
         setSupportActionBar(toolbar_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar_back.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

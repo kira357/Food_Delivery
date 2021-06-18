@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class DiaDiemFragment extends Fragment {
     private ArrayList<DiaDiem> diaDiemArrayList;
     private DiaDiemAdapter diaDiemAdapter;
     private TextView tvNetworkFailHome;
+    private SwipeRefreshLayout swipeRefreshLayout;
     View view;
 
 
@@ -79,6 +81,7 @@ public class DiaDiemFragment extends Fragment {
         rcv_DiaDiem = view.findViewById(R.id.rcv_DiaDiem);
         tvNetworkFailHome =view.findViewById(R.id.tvNetworkFailHome);
 
+
     }
 
 
@@ -97,8 +100,6 @@ public class DiaDiemFragment extends Fragment {
                     rcv_DiaDiem.setHasFixedSize(true);
                     rcv_DiaDiem.setAdapter(diaDiemAdapter);
                     diaDiemAdapter.notifyDataSetChanged();
-
-
                 }
 
                 @Override

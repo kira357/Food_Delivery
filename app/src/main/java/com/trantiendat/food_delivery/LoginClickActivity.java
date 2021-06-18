@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -41,6 +42,7 @@ public class LoginClickActivity extends AppCompatActivity {
     private TextInputLayout Username_text_input, Password_text_input;
     private TextInputEditText Username_edit_text, Password_edit_text;
     private CheckBox ckb_rememberPass;
+    private TextView tv_SignUp;
     SessionManagement sessionManagement;
 
 
@@ -65,6 +67,7 @@ public class LoginClickActivity extends AppCompatActivity {
         Password_text_input = findViewById(R.id.Password_text_input);
         Password_edit_text = findViewById(R.id.Password_edit_text);
         ckb_rememberPass = findViewById(R.id.ckb_rememberPass);
+        tv_SignUp = findViewById(R.id.tv_SignUp);
     }
 
 
@@ -88,7 +91,13 @@ public class LoginClickActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        tv_SignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginClickActivity.this,MainSignInActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void Login(String user, String password) {
@@ -108,6 +117,7 @@ public class LoginClickActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                       // onBackPressed();
                     } else {
                         for(int i = 0 ; i < userArrayList.size() ; i ++){
                             User userInfo = userArrayList.get(i);
@@ -122,12 +132,12 @@ public class LoginClickActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(LoginClickActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(LoginClickActivity.this, "vui long kiem tra lai mat khau", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onFailure(Call<ArrayList<User>> call, Throwable t) {
-                Toast t1 = Toast.makeText(LoginClickActivity.this, "Vui lòng kiểm tra kết nối mạng", Toast.LENGTH_SHORT);
+                Toast t1 = Toast.makeText(LoginClickActivity.this, "Vui lòng kiểm tra mật khẩu", Toast.LENGTH_SHORT);
                 t1.setGravity(Gravity.CENTER,0,0);
                 t1.show();
             }

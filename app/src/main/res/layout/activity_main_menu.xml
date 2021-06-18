@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".MainMenuActivity">
 
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="0dp"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         app:itemBackground="@color/design_default_color_error"
         app:itemIconTint="@color/custome_color_navigation"
+        app:itemRippleColor="@color/white"
         app:itemTextColor="@color/custome_color_navigation"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"

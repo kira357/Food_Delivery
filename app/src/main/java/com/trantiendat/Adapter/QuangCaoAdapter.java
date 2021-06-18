@@ -14,12 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.food_delivery.ChiTietDiaDiemActivity;
+import com.trantiendat.food_delivery.ChiTietQuangCaoActivity;
 import com.trantiendat.food_delivery.MainActivity;
 import com.trantiendat.food_delivery.R;
 
@@ -67,7 +67,7 @@ public class QuangCaoAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, ChiTietDiaDiemActivity.class);
+                Intent intent = new Intent(context, ChiTietQuangCaoActivity.class);
                 intent.putExtra("QuangCao", quangCaoArrayList.get(position));
 
                 context.startActivity(intent);

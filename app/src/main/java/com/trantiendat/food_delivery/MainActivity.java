@@ -36,11 +36,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(chiTietHoaDonArrayList != null){
 
-        }else {
-            chiTietHoaDonArrayList = new ArrayList<>();
         }
-
-
 
         setChangeView();
     }
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
-            }, 2000);
+            }, 3500);
         }
     }
 

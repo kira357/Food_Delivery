@@ -85,7 +85,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.trantiendat.Model.ChiTietDiaDiem;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.MonAn;
@@ -146,7 +145,6 @@ public class DiaDiemAdapter extends RecyclerView.Adapter<DiaDiemAdapter.ViewHold
                 intent.putExtra("DiaDiem", diaDiemArrayList.get(position));
                 intent.putExtra("pos", id);
                 context.startActivity(intent);
-
 
             }
         });

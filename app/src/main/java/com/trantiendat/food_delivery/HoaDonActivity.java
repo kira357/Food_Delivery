@@ -1,18 +1,14 @@
 package com.trantiendat.food_delivery;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,15 +16,9 @@ import android.widget.Toast;
 
 import com.trantiendat.Adapter.ChiTietHoaDonAdapter;
 import com.trantiendat.Model.ChiTietHoaDon;
-import com.trantiendat.Model.DiaDiem;
-import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.direction.SessionManagement;
-import com.trantiendat.food_delivery.Fragment.Cart.PayFragment;
-import com.trantiendat.food_delivery.Fragment.CartFragment;
-import com.trantiendat.food_delivery.Fragment.DiaDiemFragment;
-import com.trantiendat.food_delivery.Fragment.HomeFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -47,8 +37,6 @@ public class HoaDonActivity extends AppCompatActivity {
     String id;
     String id_user;
     SessionManagement sessionManagement;
-    ChiTietHoaDon chiTietHoaDon;
-    public static String LIST = "CTHD";
 
 
     @Override
@@ -81,6 +69,9 @@ public class HoaDonActivity extends AppCompatActivity {
                 rcv_cthd.setHasFixedSize(true);
                 rcv_cthd.setAdapter(chiTietHoaDonAdapter);
                 chiTietHoaDonAdapter.notifyDataSetChanged();
+
+                RecyclerView.ItemDecoration decoration = new DividerItemDecoration(HoaDonActivity.this, DividerItemDecoration.VERTICAL);
+                rcv_cthd.addItemDecoration(decoration);
                 DataIntent();
                 long tong = 0;
                 for (int i = 0; i < chiTietHoaDonArrayList.size(); i++) {
@@ -96,7 +87,6 @@ public class HoaDonActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        if (sessionManagement.Check()) {
                             DataService dataService = APIService.getService();
                             Call<String> callback = dataService.saveDatahoadon(finalTong, id);
                             callback.enqueue(new Callback<String>() {
@@ -116,27 +106,7 @@ public class HoaDonActivity extends AppCompatActivity {
                                 }
 
                             });
-
                             startActivity(new Intent(HoaDonActivity.this, MainMenuActivity.class));
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(HoaDonActivity.this);
-                            builder.setMessage("Vui lòng đăng nhập trước khi thanh toán")
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            Intent intent = new Intent(HoaDonActivity.this, LoginActivity.class);
-                                            intent.putParcelableArrayListExtra(LIST, chiTietHoaDonArrayList);
-                                            startActivity(intent);
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            builder.create().show();
-
-                        }
-
                     }
                 });
 
@@ -158,12 +128,7 @@ public class HoaDonActivity extends AppCompatActivity {
             if (intent.hasExtra("id_user")) {
                 id_user = intent.getStringExtra("id_user");
             }
-//            if (intent.hasExtra(LIST)) {
-//                chiTietHoaDonArrayList = intent.getParcelableArrayListExtra(LIST);
-//                for (int i = 0; i < chiTietHoaDonArrayList.size(); i++) {
-//                    ChiTietHoaDon chiTietHoaDon = chiTietHoaDonArrayList.get(i);
-//                    Log.d("TAG", "DataIntent: " + chiTietHoaDon.getTenDiaDiem());
-//                }
+
             }
 
         }

@@ -10,8 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -45,9 +49,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
+        mAuth = FirebaseAuth.getInstance();
         init();
         LoginFB();
-        LoginGG();
+        createRequest();
+        signIN();
         Login();
 
     }
@@ -101,27 +107,23 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void LoginGG() {
-        mAuth = FirebaseAuth.getInstance();
-
+    private void createRequest() {
+        // yêu cầu người dùng cung cấp một sô thông tin như tên , hình ảnh ,..
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        signIN();
     }
 
+    // đăng nhập  
     private void signIN() {
         btn_LoginGG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
-                signInIntent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                startActivity(signInIntent);
-                finish();
 
             }
         });
@@ -159,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("TAG", "Google sign in failed", e);
@@ -167,24 +169,30 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI();
+                    public void onSuccess(AuthResult authResult) {
+                        if (authResult.getAdditionalUserInfo().isNewUser()) {
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            Toast.makeText(LoginActivity.this, "Account Created...\n" + firebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+                            Intent signInIntent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                            startActivity(signInIntent);
+
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            updateUI();
+                            Toast.makeText(LoginActivity.this, " Existing user...\n" , Toast.LENGTH_SHORT).show();
                         }
+
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "onFailure: Loggin failed ");
+            }
+        });
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -203,10 +211,11 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             updateUI();
                         }
                     }
                 });
     }
+
+
 }
