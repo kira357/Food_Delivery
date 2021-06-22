@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">Food_Delivery</string>
     <string name="title"> Yummy Yummy </string>
+    <string name="ResetPassword"> Reset password </string>
+    <string name="LoginMain"> Login account </string>
+    <string name="SignUp"> Sign Up account </string>
     <string name="shr_hint_username"> Username </string>
     <string name="shr_hint_password"> Password </string>
+    <string name="shr_hint_passwordNew"> New password </string>
+    <string name="shr_hint_passwordConfirm"> New password confirm </string>
     <string name="shr_hint_Email"> Email </string>
     <string name="shr_hint_Confirmpassword"> Confirm password </string>
     <string name="shr_button_Login"> Login </string>
-    <string name="shr_button_Signin"> Sign in </string>
+    <string name="shr_button_Signin"> Sign up </string>
+    <string name="shr_button_Reset"> Reset </string>
     <string name="shr_button_cancel"> Cancel </string>
     <string name="shr_error_password">  Password is empty</string>
+
+
     <string name="facebook_app_id">2259813527483149</string>
     <string name="fb_login_protocol_scheme">fb2259813527483149</string>
     <string name="map_api_key">AIzaSyDnixNN5PERph2banplmVWnaupVgWVjYyw</string>
+
+
     <string name="Home">Home</string>
     <string name="Favourite">Favourite</string>
     <string name="Cart">Shopping cart</string>
@@ -20,5 +30,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">name</string>
     <string name="SHARE">Login</string>
+
 
 </resources>

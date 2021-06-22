@@ -51,12 +51,13 @@
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" android:background="#D61212">
+            android:background="#D61212"
+            android:orientation="horizontal">
 
             <ImageButton
-                android:backgroundTint="#D61212"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:backgroundTint="#D61212"
                 android:src="@drawable/ic_baseline_payment_24"></ImageButton>
 
             <Button
@@ -68,9 +69,11 @@
                 android:textSize="24sp">
 
             </Button>
+
         </LinearLayout>
 
-    </LinearLayout>
 
+
+    </LinearLayout>
 
 </ScrollView>

@@ -4,28 +4,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.trantiendat.Model.ChiTietHoaDon;
 import com.trantiendat.Model.User;
-import com.trantiendat.Service.API;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
 import com.trantiendat.direction.SessionManagement;
@@ -43,6 +35,7 @@ public class LoginClickActivity extends AppCompatActivity {
     private TextInputEditText Username_edit_text, Password_edit_text;
     private CheckBox ckb_rememberPass;
     private TextView tv_SignUp;
+    private TextView tv_resetPassword;
     SessionManagement sessionManagement;
 
 
@@ -68,6 +61,7 @@ public class LoginClickActivity extends AppCompatActivity {
         Password_edit_text = findViewById(R.id.Password_edit_text);
         ckb_rememberPass = findViewById(R.id.ckb_rememberPass);
         tv_SignUp = findViewById(R.id.tv_SignUp);
+        tv_resetPassword = findViewById(R.id.tv_resetPassword);
     }
 
 
@@ -94,7 +88,14 @@ public class LoginClickActivity extends AppCompatActivity {
         tv_SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginClickActivity.this,MainSignInActivity.class);
+                Intent intent = new Intent(LoginClickActivity.this, MainSignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+        tv_resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginClickActivity.this,ResetPasswordActivity.class);
                 startActivity(intent);
             }
         });

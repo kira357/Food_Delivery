@@ -5,8 +5,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.Request;
 import com.trantiendat.Adapter.ChiTietHoaDonAdapter;
 import com.trantiendat.Model.ChiTietHoaDon;
 import com.trantiendat.Service.APIService;
@@ -39,11 +38,14 @@ public class HoaDonActivity extends AppCompatActivity {
     SessionManagement sessionManagement;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
         sessionManagement = new SessionManagement(this);
+
+
         DataIntent();
         init();
         getDataCTHD();
@@ -87,26 +89,26 @@ public class HoaDonActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                            DataService dataService = APIService.getService();
-                            Call<String> callback = dataService.saveDatahoadon(finalTong, id);
-                            callback.enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    String ketqua = response.body();
-                                    if (ketqua.equals("Success")) {
-                                        Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-                                    }
+                        DataService dataService = APIService.getService();
+                        Call<String> callback = dataService.saveDatahoadon(finalTong, id);
+                        callback.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                String ketqua = response.body();
+                                if (ketqua.equals("Success")) {
+                                    Toast.makeText(HoaDonActivity.this, "đã thanh toán", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(HoaDonActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
 
-                                }
+                            }
 
-                            });
-                            startActivity(new Intent(HoaDonActivity.this, MainMenuActivity.class));
+                        });
+                        startActivity(new Intent(HoaDonActivity.this, MainMenuActivity.class));
                     }
                 });
 
@@ -119,6 +121,7 @@ public class HoaDonActivity extends AppCompatActivity {
         });
     }
 
+
     private void DataIntent() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -129,7 +132,7 @@ public class HoaDonActivity extends AppCompatActivity {
                 id_user = intent.getStringExtra("id_user");
             }
 
-            }
-
         }
+
     }
+}

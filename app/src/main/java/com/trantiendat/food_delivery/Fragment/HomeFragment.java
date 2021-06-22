@@ -232,7 +232,6 @@ public class HomeFragment extends Fragment {
     View view;
     TextView tv_vitri;
     SearchView sv_TimKiem;
-    DiaDiem diaDiem;
     FusedLocationProviderClient fusedLocationProviderClient;
 
 
@@ -281,12 +280,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void openSetting() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-        intent.setData(uri);
-        startActivity(intent);
-    }
+
 
     public void requestPermissionLocation() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

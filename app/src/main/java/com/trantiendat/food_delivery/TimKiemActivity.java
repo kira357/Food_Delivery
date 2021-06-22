@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.trantiendat.Adapter.TimKiemAdapter;
@@ -30,6 +31,7 @@ public class TimKiemActivity extends AppCompatActivity {
     TimKiemAdapter timKiemAdapter;
     ListView lv_diadiem;
     Toolbar toolbar_back;
+    TextView tv_mess;
 
 
     @Override
@@ -47,9 +49,12 @@ public class TimKiemActivity extends AppCompatActivity {
         sv_diadiem = findViewById(R.id.sv_diadiem);
         lv_diadiem = findViewById(R.id.lv_diadiem);
         toolbar_back = findViewById(R.id.toolbar_back);
+        tv_mess = findViewById(R.id.tv_mess);
     }
 
     private void TimkiemDiaDiem() {
+        sv_diadiem.setIconifiedByDefault(false);
+
         sv_diadiem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -59,9 +64,14 @@ public class TimKiemActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
                         diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
-                        timKiemAdapter = new TimKiemAdapter(TimKiemActivity.this, diaDiemArrayList);
-                        lv_diadiem.setAdapter(timKiemAdapter);
-                        timKiemAdapter.notifyDataSetChanged();
+                        if (diaDiemArrayList.size() > 0) {
+                            tv_mess.setVisibility(View.GONE);
+                            timKiemAdapter = new TimKiemAdapter(TimKiemActivity.this, diaDiemArrayList);
+                            lv_diadiem.setAdapter(timKiemAdapter);
+                            timKiemAdapter.notifyDataSetChanged();
+                        } else {
+                            tv_mess.setVisibility(View.VISIBLE);
+                        }
 
                     }
 
@@ -82,9 +92,14 @@ public class TimKiemActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
                         diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
-                        timKiemAdapter = new TimKiemAdapter(TimKiemActivity.this, diaDiemArrayList);
-                        lv_diadiem.setAdapter(timKiemAdapter);
-                        timKiemAdapter.notifyDataSetChanged();
+                        if (diaDiemArrayList.size() > 0) {
+                            timKiemAdapter = new TimKiemAdapter(TimKiemActivity.this, diaDiemArrayList);
+                            lv_diadiem.setAdapter(timKiemAdapter);
+                            tv_mess.setVisibility(View.GONE);
+                            timKiemAdapter.notifyDataSetChanged();
+                        } else {
+                            tv_mess.setVisibility(View.VISIBLE);
+                        }
 
                     }
 

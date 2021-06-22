@@ -5,7 +5,7 @@
     android:theme="@style/BottomSheetTheme"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/custom_frame"
+    android:background="@drawable/custom_bottom"
     android:orientation="vertical"
     app:behavior_peekHeight="0dp">
 
@@ -50,7 +50,7 @@
 
         <fragment
             android:id="@+id/maps"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:name="com.google.android.gms.maps.MapFragment"
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/title">
+            android:text="@string/SignUp">
 
         </com.google.android.material.textview.MaterialTextView>
 
@@ -108,7 +108,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="@string/shr_button_Signin" />
+                android:background="@drawable/bg_white_all_corner"
+                android:text="@string/shr_button_Signin"
+                app:backgroundTint="@color/design_default_color_error" />
 
         </LinearLayout>
 

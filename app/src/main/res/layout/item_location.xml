@@ -17,8 +17,7 @@
             android:id="@+id/imgv_location"
             android:layout_width="120dp"
             android:layout_height="match_parent"
-            android:scaleType="fitXY">
-        </ImageView>
+            android:scaleType="fitXY"></ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,6 +78,30 @@
                     android:textSize="15sp">
 
                 </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|bottom"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_Uudai"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_sales">
+
+                        <TextView
+                            android:id="@+id/tv_uuDai"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="sales"
+                            android:textColor="#CC0F0F"
+                            android:textSize="16sp">
+
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
 

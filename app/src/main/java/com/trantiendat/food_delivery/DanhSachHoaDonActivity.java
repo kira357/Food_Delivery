@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,6 +62,16 @@ public class DanhSachHoaDonActivity extends AppCompatActivity {
                 danhSachHoaDonAdapter = new DanhSachHoaDonAdapter(DanhSachHoaDonActivity.this, hoaDonArrayList);
                 lv_danhsachhoadon.setAdapter(danhSachHoaDonAdapter);
                 danhSachHoaDonAdapter.notifyDataSetChanged();
+
+                lv_danhsachhoadon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        HoaDon hoaDon = hoaDonArrayList.get(position);
+                        Intent intent = new Intent(DanhSachHoaDonActivity.this,ChiTietHoaDonActivity.class);
+                        intent.putExtra("ID_HoaDon" , hoaDon);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
@@ -69,6 +80,7 @@ public class DanhSachHoaDonActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void setToolbar() {
         setSupportActionBar(toolbar_backHoaDon);

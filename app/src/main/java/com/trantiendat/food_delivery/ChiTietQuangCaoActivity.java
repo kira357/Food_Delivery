@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -45,6 +46,7 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
     private ImageView img_QuangCao;
     private DanhSachDiaDiemAdapter danhSachDiaDiemAdapter;
     private QuangCao quangCao;
+    private ProgressBar progress_QuangCao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +57,18 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
         setToolbar();
         CheckData();
     }
+
     private void init() {
         coordinatorQuangCao = findViewById(R.id.coordinatorQuangCao);
         collapsingtoolbarQuangCao = findViewById(R.id.collapsingtoolbarQuangCao);
         rcv_danhsachDiaDiemQuangCao = findViewById(R.id.rcv_danhsachDiaDiemQuangCao);
         toolbar_backQuangCao = findViewById(R.id.toolbar_backQuangCao);
         img_QuangCao = findViewById(R.id.img_QuangCao);
+        progress_QuangCao = findViewById(R.id.progress_QuangCao);
 
 
     }
+
     private void DataIntent() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -72,12 +77,17 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
             }
         }
     }
+
     private void CheckData() {
         if (quangCao != null && !quangCao.getNoiDungQuangCao().equals("")) {
             setValueInView(quangCao.getNoiDungQuangCao(), quangCao.getHinhQuangCao());
             getDataQuangCao(quangCao.getIDQuangCao());
         }
+        if (quangCao.getNoiDungQuangCao().equals("")) {
+
+        }
     }
+
     private void setValueInView(String ten, String hinh) {
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -89,8 +99,10 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
         Glide.with(this).load(hinh).into(img_QuangCao);
 
     }
+
     private void getDataQuangCao(String ID_QuangCao) {
         DataService dataService = APIService.getService();
+        progress_QuangCao.setVisibility(View.VISIBLE);
         Call<List<DiaDiem>> callback = dataService.getDataChitietquangcao(ID_QuangCao);
         callback.enqueue(new Callback<List<DiaDiem>>() {
             @Override
@@ -100,7 +112,7 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
                 rcv_danhsachDiaDiemQuangCao.setLayoutManager(new LinearLayoutManager(ChiTietQuangCaoActivity.this));
                 rcv_danhsachDiaDiemQuangCao.setHasFixedSize(true);
                 rcv_danhsachDiaDiemQuangCao.setAdapter(danhSachDiaDiemAdapter);
-
+                progress_QuangCao.setVisibility(View.GONE);
                 RecyclerView.ItemDecoration decoration = new DividerItemDecoration(ChiTietQuangCaoActivity.this, DividerItemDecoration.VERTICAL);
                 rcv_danhsachDiaDiemQuangCao.addItemDecoration(decoration);
             }
@@ -111,6 +123,7 @@ public class ChiTietQuangCaoActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setToolbar() {
         setSupportActionBar(toolbar_backQuangCao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

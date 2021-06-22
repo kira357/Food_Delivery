@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,8 @@ public class CartFragment extends Fragment {
     ArrayList<GioHang> gioHangArrayList;
     public static GioHangAdapter gioHangAdapter;
     SessionManagement sessionManagement;
+    ProgressBar progress_barCart;
+    TextView tv_mess;
 
 
     public CartFragment() {
@@ -73,6 +77,8 @@ public class CartFragment extends Fragment {
 
         rcv_Order = view.findViewById(R.id.rcv_Order);
         btn_chot = view.findViewById(R.id.btn_chot);
+        progress_barCart = view.findViewById(R.id.progress_barCart);
+        tv_mess = view.findViewById(R.id.tv_mess);
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -111,20 +117,26 @@ public class CartFragment extends Fragment {
 
     private void getDataGoiHang() {
         DataService dataService = APIService.getService();
+        progress_barCart.setVisibility(View.VISIBLE);
         Call<List<GioHang>> callback = dataService.getDataGioHang();
         callback.enqueue(new Callback<List<GioHang>>() {
             @Override
             public void onResponse(Call<List<GioHang>> call, Response<List<GioHang>> response) {
-
                 gioHangArrayList = new ArrayList<>();
                 gioHangArrayList = (ArrayList<GioHang>) response.body();
-                gioHangAdapter = new GioHangAdapter(gioHangArrayList, getActivity());
-                rcv_Order.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rcv_Order.setHasFixedSize(true);
-                new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcv_Order);
-                rcv_Order.setAdapter(gioHangAdapter);
+                if (gioHangArrayList.size() > 0) {
+                    gioHangAdapter = new GioHangAdapter(gioHangArrayList, getActivity());
+                    rcv_Order.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    rcv_Order.setHasFixedSize(true);
+                    new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcv_Order);
+                    rcv_Order.setAdapter(gioHangAdapter);
 
-
+                    tv_mess.setVisibility(View.GONE);
+                    progress_barCart.setVisibility(View.GONE);
+                } else {
+                    tv_mess.setVisibility(View.VISIBLE);
+                    progress_barCart.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -162,6 +174,7 @@ public class CartFragment extends Fragment {
                                         getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                                     }
 
+
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
 
@@ -182,7 +195,7 @@ public class CartFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int id) {
                                     Intent intent = new Intent(getActivity(), LoginClickActivity.class);
                                     startActivity(intent);
-                                   getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                    getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                                 }
                             })
                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

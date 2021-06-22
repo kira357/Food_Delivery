@@ -1,25 +1,20 @@
 package com.trantiendat.food_delivery.Fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.trantiendat.Adapter.DiaDiemAdapter;
-import com.trantiendat.Database.PaginationScrollListener;
 import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.NetworkCheck.ConnectionReceiver;
 import com.trantiendat.Service.APIService;
@@ -40,13 +35,11 @@ public class DiaDiemFragment extends Fragment {
     private ArrayList<DiaDiem> diaDiemArrayList;
     private DiaDiemAdapter diaDiemAdapter;
     private TextView tvNetworkFailHome;
-    private SwipeRefreshLayout swipeRefreshLayout;
+
+    ProgressBar progressBar;
+
+    LinearLayoutManager linearLayoutManager;
     View view;
-
-
-    public DiaDiemFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -72,55 +65,48 @@ public class DiaDiemFragment extends Fragment {
             }
         }, 1000);
         init();
-        Threads threads = new Threads();
-        threads.execute();
+        GetDataDiaDiem();
+        setView();
         return view;
     }
 
     private void init() {
         rcv_DiaDiem = view.findViewById(R.id.rcv_DiaDiem);
-        tvNetworkFailHome =view.findViewById(R.id.tvNetworkFailHome);
+        tvNetworkFailHome = view.findViewById(R.id.tvNetworkFailHome);
+        progressBar = view.findViewById(R.id.progress_bar);
 
 
     }
 
+    private void GetDataDiaDiem() {
+        DataService dataService = APIService.getService();
+        progressBar.setVisibility(View.VISIBLE);
+        Call<List<DiaDiem>> callback = dataService.getDataDiaDiem();
+        callback.enqueue(new Callback<List<DiaDiem>>() {
+            @Override
+            public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
+                diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
+                progressBar.setVisibility(View.GONE);
+                diaDiemAdapter = new DiaDiemAdapter(diaDiemArrayList, getActivity());
+                linearLayoutManager = new LinearLayoutManager(getActivity());
+                rcv_DiaDiem.setLayoutManager(linearLayoutManager);
+                rcv_DiaDiem.setHasFixedSize(true);
+                rcv_DiaDiem.setAdapter(diaDiemAdapter);
+                diaDiemAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
 
-    public class Threads extends AsyncTask<Void, Void, Void> {
-        private void GetDataDiaDiem() {
-            DataService dataService = APIService.getService();
-            Call<List<DiaDiem>> callback = dataService.getDataDiaDiem();
-            callback.enqueue(new Callback<List<DiaDiem>>() {
-                @Override
-                public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
-                    diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
+            }
 
-                    diaDiemAdapter = new DiaDiemAdapter(diaDiemArrayList, getActivity());
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    rcv_DiaDiem.setLayoutManager(linearLayoutManager);
-                    rcv_DiaDiem.setHasFixedSize(true);
-                    rcv_DiaDiem.setAdapter(diaDiemAdapter);
-                    diaDiemAdapter.notifyDataSetChanged();
-                }
+            @Override
+            public void onFailure(Call<List<DiaDiem>> call, Throwable t) {
 
-                @Override
-                public void onFailure(Call<List<DiaDiem>> call, Throwable t) {
-
-                }
-            });
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            GetDataDiaDiem();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-            rcv_DiaDiem.addItemDecoration(decoration);
-        }
+            }
+        });
     }
+    private void setView(){
+        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        rcv_DiaDiem.addItemDecoration(decoration);
+    }
+
 
 }

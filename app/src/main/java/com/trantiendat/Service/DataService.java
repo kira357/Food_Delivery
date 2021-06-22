@@ -5,8 +5,10 @@ import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.GioHang;
 import com.trantiendat.Model.HoaDon;
 import com.trantiendat.Model.MonAn;
+import com.trantiendat.Model.PhanLoai;
 import com.trantiendat.Model.QuangCao;
 import com.trantiendat.Model.TaiKhoan;
+import com.trantiendat.Model.ThongTin;
 import com.trantiendat.Model.User;
 import com.trantiendat.Model.YeuThich;
 
@@ -19,10 +21,13 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface DataService {
     @GET("Quan%20an.php")
     Call<List<DiaDiem>> getDataDiaDiem();
+
     @GET("Quang%20cao.php")
     Call<List<QuangCao>> getDataQuangCao();
 
@@ -32,9 +37,11 @@ public interface DataService {
     @GET("danhsachCTHD.php")
     Call<List<ChiTietHoaDon>> getDataCTHD();
 
-
     @GET("danhsachyeuthich.php")
     Call<List<DiaDiem>> getDataYeuThich();
+
+    @GET("PhanLoai.php")
+    Call<List<PhanLoai>> getDataPhanLoai();
 
     @FormUrlEncoded
     @POST("danhsachhoadon.php")
@@ -103,5 +110,16 @@ public interface DataService {
     @POST("suaYeuThich.php")
     Call<String> suaYeuThich(@Field("ID_DiaDiem") String ID_DiaDiem,@Field("TrangThai") int TrangThai);
 
+    @FormUrlEncoded
+    @POST("ChiTietPhanLoai.php")
+    Call<List<DiaDiem>> getDatadanhsanhPhanLoai(@Field("id_PhanLoai") String id_PhanLoai);
+
+    @FormUrlEncoded
+    @POST("suaPassword.php")
+    Call<String> resetDataPassword(@Field("user") String user,@Field("newPass") String newPass);
+
+    @FormUrlEncoded
+    @POST("thongtinCTHD.php")
+    Call<List<ThongTin>> thongtinCTHD(@Field("id_HoaDon") String id_HoaDon);
 
 }

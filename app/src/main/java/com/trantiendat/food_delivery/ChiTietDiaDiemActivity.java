@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
     private QuangCao quangCao;
     private FrameLayout layoutFrame;
     private Database database;
-    String like = "1";
+
     int pos;
 
 
@@ -92,6 +93,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
         layoutFrame = findViewById(R.id.layoutFrame);
         imgv_bottom = findViewById(R.id.imgv_bottom);
 
+
     }
 
     private void CheckData() {
@@ -117,6 +119,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
 
     private void getDataMonAn(String ID_DiaDiem) {
         DataService dataService = APIService.getService();
+
         Call<List<MonAn>> callback = dataService.getDatadanhsachmonan(ID_DiaDiem);
         callback.enqueue(new Callback<List<MonAn>>() {
             @Override
@@ -126,6 +129,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
                 rcv_danhsachmonan.setLayoutManager(new LinearLayoutManager(ChiTietDiaDiemActivity.this));
                 rcv_danhsachmonan.setHasFixedSize(true);
                 rcv_danhsachmonan.setAdapter(monAnAdapter);
+
             }
 
             @Override
@@ -250,6 +254,7 @@ public class ChiTietDiaDiemActivity extends AppCompatActivity {
             }
             if (intent.hasExtra("DiaDiem")) {
                 diaDiem = (DiaDiem) intent.getSerializableExtra("DiaDiem");
+
             }
             if (intent.hasExtra("pos")) {
                 pos = intent.getIntExtra("pos", 0);

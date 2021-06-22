@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
 
     private static final int MY_REQUEST_CODE = 123;
     private static final int PICK_IMAGE_CODE = 0;
+    private static final int RESULT_OK = 1;
     private MaterialButton btn_LogOut;
     private MaterialButton btn_LogIn;
     private TextView tv_tenUser, tv_Diachi;
@@ -88,35 +90,12 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     TextView tv_soluongdon;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private LinearLayout linearLayout;
+    private LinearLayout linearLayout,linearLayoutSetting;
     private DanhSachHoaDonAdapter danhSachHoaDonAdapter;
     private ArrayList<HoaDon> hoaDonArrayList;
     View view;
     SessionManagement sessionManagement;
 
-//    private ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            new ActivityResultCallback<ActivityResult>() {
-//                @Override
-//                public void onActivityResult(ActivityResult result) {
-//                    if (result.getResultCode() == Activity.RESULT_OK) {
-//                        // There are no request codes
-//                        Intent data = result.getData();
-//                        if (data == null) {
-//                            return;
-//                        }
-//                        Uri uri = data.getData();
-//                        try {
-//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-//                            imgv_edit.setImageBitmap(bitmap);
-//                        } catch (FileNotFoundException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,6 +129,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
         imgv_edit = view.findViewById(R.id.imgv_edit);
         linearLayout = view.findViewById(R.id.linearLayout);
         tv_soluongdon = view.findViewById(R.id.tv_soluongdon);
+        linearLayoutSetting = view.findViewById(R.id.linearLayoutSetting);
     }
 
     private void setEvent() {
@@ -157,6 +137,8 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
         btn_LogIn.setOnClickListener(this);
         imgv_edit.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
+        imgv_hinhUser.setOnClickListener(this);
+        linearLayoutSetting.setOnClickListener(this);
 
     }
 
@@ -265,56 +247,6 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
         request.setParameters(bundle);
         request.executeAsync();
     }
-//    private void onClickRequestPermission() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            openGallery();
-//            return;
-//        }
-//        if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//            openGallery();
-//        } else {
-//            String [] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
-//            requestPermissions(permission,MY_REQUEST_CODE);
-//
-//        }
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == MY_REQUEST_CODE) {
-//
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                openGallery();
-//            }
-//        }
-//    }
-//
-//        private void openGallery() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent,"select picture"),MY_REQUEST_CODE);
-//
-//       // someActivityResultLauncher.launch(Intent.createChooser(intent, "select picture "));
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == MY_REQUEST_CODE ){
-//            Uri uri = data.getData();
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-//                imgv_hinhUser.setImageBitmap(bitmap);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//    }
 
     private void setSoLuong() {
         String id_user = sessionManagement.getUser().getIDUser();
@@ -330,11 +262,58 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<List<HoaDon>> call, Throwable t) {
-                Toast t1 = Toast.makeText(getActivity(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
-                t1.setGravity(Gravity.CENTER, 0, 0);
-                t1.show();
             }
         });
+    }
+
+    private void permission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+                ;
+            String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(permission, MY_REQUEST_CODE);
+        } else {
+            pickImageFromGallery();
+
+        }
+
+        pickImageFromGallery();
+
+    }
+
+
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImageFromGallery();
+                } else {
+                    Toast.makeText(getActivity(), "permission denied ", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
+           // Glide.with(getActivity()).load(data.getData()).into(imgv_hinhUser);
+            imgv_hinhUser.setImageURI(data.getData());
+        }
+    }
+    private void openSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
     @Override
@@ -392,9 +371,9 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                                 String ketqua = response.body();
                                 if (ketqua.equals("Success")) {
                                     Toast.makeText(getActivity(), "cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                }else {
+                                } else {
 
-                                Toast.makeText(getActivity(), "cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "cập nhật thất bại", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -409,11 +388,12 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                         dialog.dismiss();
                     }
                 });
+
                 dialog.show();
                 imgv_anhEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // onClickRequestPermission();
+                        //permission();
                     }
                 });
                 break;
@@ -421,8 +401,11 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                 Intent intent2 = new Intent(getActivity(), DanhSachHoaDonActivity.class);
                 startActivity(intent2);
                 break;
-
+            case R.id.linearLayoutSetting:
+                openSetting();
+                break;
         }
+
     }
 
 }

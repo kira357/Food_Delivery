@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-
 public class DiaDiem implements Serializable {
 
     @SerializedName("ID_DiaDiem")
@@ -27,6 +26,9 @@ public class DiaDiem implements Serializable {
     @SerializedName("TrangThai")
     @Expose
     private String trangThai;
+    @SerializedName("UuDai")
+    @Expose
+    private String uuDai;
 
     public String getIDDiaDiem() {
         return iDDiaDiem;
@@ -74,6 +76,14 @@ public class DiaDiem implements Serializable {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public String getUuDai() {
+        return uuDai;
+    }
+
+    public void setUuDai(String uuDai) {
+        this.uuDai = uuDai;
     }
 
 }

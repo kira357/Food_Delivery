@@ -24,11 +24,28 @@
 
     </SearchView>
 
-    <ListView
-        android:id="@+id/lv_diadiem"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+        <TextView
+            android:id="@+id/tv_mess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="NO FOUND "
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="gone">
+
+        </TextView>
+
+        <ListView
+            android:id="@+id/lv_diadiem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+    </FrameLayout>
 
 </LinearLayout>

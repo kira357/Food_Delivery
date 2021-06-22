@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,12 +35,14 @@ import retrofit2.Response;
 
 public class FavouriteFragment extends Fragment {
 
-    RecyclerView rcv_yeuthich;
+    private RecyclerView rcv_yeuthich;
 
-    ArrayList<DiaDiem> diaDiemArrayList;
-    View view;
-    YeuThichApdapter yeuThichAdapter;
-    Database database;
+    private ArrayList<DiaDiem> diaDiemArrayList;
+    private View view;
+    private YeuThichApdapter yeuThichAdapter;
+    private Database database;
+    private ProgressBar progress_barYeuThich;
+    private TextView tv_mess;
 
 
     public FavouriteFragment() {
@@ -64,6 +68,8 @@ public class FavouriteFragment extends Fragment {
 
     private void init() {
         rcv_yeuthich = view.findViewById(R.id.rcv_yeuthich);
+        progress_barYeuThich = view.findViewById(R.id.progress_barYeuThich);
+        tv_mess = view.findViewById(R.id.tv_mess);
     }
 
 
@@ -88,9 +94,9 @@ public class FavouriteFragment extends Fragment {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         String ketqua = response.body();
-                        if(ketqua.equals("Success")){
+                        if (ketqua.equals("Success")) {
                             Toast.makeText(getActivity(), "đã bỏ lưu", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             Toast.makeText(getActivity(), "lỗi", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -106,16 +112,24 @@ public class FavouriteFragment extends Fragment {
             }
         };
         DataService dataService = APIService.getService();
+        progress_barYeuThich.setVisibility(View.VISIBLE);
         Call<List<DiaDiem>> callback = dataService.getDataYeuThich();
         callback.enqueue(new Callback<List<DiaDiem>>() {
             @Override
             public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
                 diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
-                yeuThichAdapter = new YeuThichApdapter(getActivity(), diaDiemArrayList);
-                rcv_yeuthich.setLayoutManager(new LinearLayoutManager(getActivity()));
-                rcv_yeuthich.setHasFixedSize(true);
-                new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcv_yeuthich);
-                rcv_yeuthich.setAdapter(yeuThichAdapter);
+                if (diaDiemArrayList.size() > 0) {
+                    yeuThichAdapter = new YeuThichApdapter(getActivity(), diaDiemArrayList);
+                    rcv_yeuthich.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    rcv_yeuthich.setHasFixedSize(true);
+                    new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcv_yeuthich);
+                    rcv_yeuthich.setAdapter(yeuThichAdapter);
+                    tv_mess.setVisibility(View.GONE);
+                    progress_barYeuThich.setVisibility(View.GONE);
+                }else {
+                    tv_mess.setVisibility(View.VISIBLE);
+                    progress_barYeuThich.setVisibility(View.GONE);
+                }
 
                 RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
                 rcv_yeuthich.addItemDecoration(decoration);

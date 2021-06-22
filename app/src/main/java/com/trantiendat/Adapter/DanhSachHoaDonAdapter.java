@@ -1,6 +1,7 @@
 package com.trantiendat.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.trantiendat.Model.HoaDon;
+import com.trantiendat.food_delivery.ChiTietHoaDonActivity;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class DanhSachHoaDonAdapter extends BaseAdapter {
     }
 
     class viewHolder {
-        TextView tv_tendon, tv_tongtien, tv_ngaydat;
+        TextView tv_tendon, tv_tongtien, tv_ngaydat,tv_xemthem;
     }
 
     @Override
@@ -50,6 +52,7 @@ public class DanhSachHoaDonAdapter extends BaseAdapter {
             viewHolder.tv_tendon = convertView.findViewById(R.id.tv_tendon);
             viewHolder.tv_tongtien = convertView.findViewById(R.id.tv_tongtien);
             viewHolder.tv_ngaydat = convertView.findViewById(R.id.tv_ngaydat);
+            viewHolder.tv_xemthem = convertView.findViewById(R.id.tv_xemthem);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (viewHolder) convertView.getTag();
@@ -58,6 +61,7 @@ public class DanhSachHoaDonAdapter extends BaseAdapter {
         viewHolder.tv_tendon.setText(hoaDon.getIDHoaDon());
         viewHolder.tv_ngaydat.setText(hoaDon.getNgayMua());
         viewHolder.tv_tongtien.setText(hoaDon.getTongHoaDon());
+
 
         return convertView;
     }
