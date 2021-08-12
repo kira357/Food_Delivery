@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.trantiendat.Adapter.ViewPagerAdapter;
+import com.trantiendat.Model.HoaDon;
 import com.trantiendat.food_delivery.Fragment.CartFragment;
 import com.trantiendat.food_delivery.Fragment.FavouriteFragment;
 import com.trantiendat.food_delivery.Fragment.HomeFragment;
@@ -32,6 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ViewPager mViewPager;
     private BottomNavigationView bottomNavigationView;
+    private Menu action;
 
 
     @Override
@@ -39,7 +43,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         mAuth = FirebaseAuth.getInstance();
-       // requestPermissionLocation();
+        // requestPermissionLocation();
         init();
         setAdapter();
         actionViewPager();
@@ -115,34 +119,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
     }
-//    private void openSetting(){
-//        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//        Uri uri = Uri.fromParts("package",getPackageName(),null);
-//        intent.setData(uri);
-//        startActivity(intent);
-//    }
-//    public void requestPermissionLocation() {
-//        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-//            return;
-//        }
-//        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//            Toast.makeText(this, "Premission granted", Toast.LENGTH_SHORT).show();
-//        }else {
-//        ActivityCompat.requestPermissions(MainMenuActivity.this,
-//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == REQUEST_CODE_LOCATION) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(this, "Premission grandted", Toast.LENGTH_SHORT).show();
-//            }else {
-//                Toast.makeText(this, "Premission denied", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
+
+
 }

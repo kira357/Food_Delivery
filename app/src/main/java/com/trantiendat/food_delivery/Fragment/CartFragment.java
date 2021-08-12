@@ -1,9 +1,11 @@
 package com.trantiendat.food_delivery.Fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,11 +67,13 @@ public class CartFragment extends Fragment {
         // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_cart, container, false);
-        sessionManagement = new com.trantiendat.direction.SessionManagement(getActivity());
+        sessionManagement = new SessionManagement(getActivity());
         init();
         getDataGoiHang();
         setEvent();
         setRCV();
+
+
         return view;
     }
 
@@ -89,29 +93,45 @@ public class CartFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            String checkid;
-            checkid = gioHangArrayList.get(position).getIDMonAn();
-            gioHangArrayList.remove(position);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Bạn có chắc là muốn xoá !!!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int position = viewHolder.getAdapterPosition();
+                            String checkid;
+                            checkid = gioHangArrayList.get(position).getIDMonAn();
+                            gioHangArrayList.remove(position);
 
-            DataService dataService = APIService.getService();
-            Call<String> callback = dataService.xoaGioHang(checkid);
-            callback.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    String ketqua = response.body();
-                    if (ketqua.equals("Success")) {
-                        Toast.makeText(getActivity(), "đã xoá thành công", Toast.LENGTH_SHORT).show();
-                    } else
-                        Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
-                }
+                            DataService dataService = APIService.getService();
+                            Call<String> callback = dataService.xoaGioHang(checkid);
+                            callback.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    String ketqua = response.body();
+                                    if (ketqua.equals("Success")) {
+                                        Toast.makeText(getActivity(), "đã xoá thành công", Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(getActivity(), "Lỗi", Toast.LENGTH_SHORT).show();
+                                }
 
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    Toast t1 = Toast.makeText(getActivity(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                                    t1.setGravity(Gravity.CENTER, 0, 0);
+                                    t1.show();
+                                }
+                            });
+                            gioHangAdapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            gioHangAdapter.notifyDataSetChanged();
+                        }
+                    });
+            builder.create().show();
 
-                }
-            });
-            gioHangAdapter.notifyDataSetChanged();
         }
     };
 
@@ -147,52 +167,79 @@ public class CartFragment extends Fragment {
     }
 
     private void setEvent() {
-
         btn_chot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sessionManagement.Check()) {
-                    String tong = "0";
-                    String id_user = sessionManagement.getUser().getIDUser();
-                    DataService dataService = APIService.getService();
-                    Call<String> callback = dataService.taoHoaDon(tong, id_user);
-                    callback.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            String id = response.body();
-                            if (Integer.parseInt(id) > 0) {
-                                Call<String> callback = dataService.insertIDhoadon(id);
-                                callback.enqueue(new Callback<String>() {
-                                    @Override
-                                    public void onResponse(Call<String> call, Response<String> response) {
-                                        String ketqua = response.body();
-                                        Toast.makeText(getActivity(), "đã tạo hoá đơn" + ketqua, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getActivity(), HoaDonActivity.class);
-                                        intent.putExtra("id_User", sessionManagement.getUser().getIDUser());
-                                        intent.putExtra("id", ketqua);
-                                        startActivity(intent);
-                                        getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                                    }
+                if (sessionManagement.CheckLogin()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("bạn có muốn chốt đơn hàng này không")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                                    progressDialog.setMessage("Uploading...");
+                                    progressDialog.show();
+                                    String tong = "0";
+                                    String id_user = sessionManagement.getUser().getIDUser();
+                                    DataService dataService = APIService.getService();
+                                    Call<String> callback = dataService.taoHoaDon(tong, id_user);
+                                    callback.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call, Response<String> response) {
+                                            String id = response.body();
+                                            if (Integer.parseInt(id) > 0) {
+                                                Call<String> callback = dataService.insertIDhoadon(id);
+                                                callback.enqueue(new Callback<String>() {
+                                                    @Override
+                                                    public void onResponse(Call<String> call, Response<String> response) {
+                                                        if (response != null) {
+                                                            progressDialog.dismiss();
+                                                            String ketqua = response.body();
+                                                            Toast.makeText(getActivity(), "đã tạo hoá đơn" + ketqua, Toast.LENGTH_SHORT).show();
+                                                            Intent intent = new Intent(getActivity(), HoaDonActivity.class);
+                                                            intent.putExtra("id_User", sessionManagement.getUser().getIDUser());
+                                                            intent.putExtra("id", ketqua);
+                                                            startActivity(intent);
+                                                            getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+                                                        }
+                                                    }
 
 
-                                    @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
+                                                    @Override
+                                                    public void onFailure(Call<String> call, Throwable t) {
+                                                        Toast t1 = Toast.makeText(getActivity(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                                                        t1.setGravity(Gravity.CENTER, 0, 0);
+                                                        t1.show();
+                                                        progressDialog.dismiss();
+                                                    }
+                                                });
+                                            }
+                                        }
 
-                                    }
-                                });
-                            }
-                        }
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            Toast t1 = Toast.makeText(getActivity(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT);
+                                            t1.setGravity(Gravity.CENTER, 0, 0);
+                                            t1.show();
+                                            progressDialog.dismiss();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                    builder.create().show();
 
-                        }
-                    });
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage("Vui lòng đăng nhập trước khi thanh toán")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+
                                     Intent intent = new Intent(getActivity(), LoginClickActivity.class);
                                     startActivity(intent);
                                     getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -221,4 +268,5 @@ public class CartFragment extends Fragment {
 
         Toast.makeText(getActivity(), "Reload pager Cart", Toast.LENGTH_SHORT).show();
     }
+
 }

@@ -16,11 +16,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -73,7 +76,7 @@ public interface DataService {
 
     @FormUrlEncoded
     @POST("luuHoaDon.php")
-    Call<String> saveDatahoadon(@Field("Tong") Long Tong ,@Field("ID_HoaDon") String ID_HoaDon );
+    Call<String> saveDatahoadon(@Field("Tong") int Tong ,@Field("ID_HoaDon") String ID_HoaDon );
 
 
     @FormUrlEncoded
@@ -121,5 +124,21 @@ public interface DataService {
     @FormUrlEncoded
     @POST("thongtinCTHD.php")
     Call<List<ThongTin>> thongtinCTHD(@Field("id_HoaDon") String id_HoaDon);
+
+    @FormUrlEncoded
+    @POST("getInfoUser.php")
+    Call<List<User>> getThongtinUser(@Field("id_user") String id_user);
+
+    @Multipart
+    @POST("uploadImage.php")
+    Call<String> getHinhUser(@Part MultipartBody.Part photo );
+
+    @FormUrlEncoded
+    @POST("capnhathinhUser.php")
+    Call<String> updateHinhUser(@Field("ID_User") String ID_User,@Field("Hinh") String Hinh);
+
+    @FormUrlEncoded
+    @POST("xoaCTHD")
+    Call<String> xoaCTHD();
 
 }

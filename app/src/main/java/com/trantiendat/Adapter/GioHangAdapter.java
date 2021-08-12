@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.trantiendat.Model.GioHang;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
+import com.trantiendat.direction.SessionManagement;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import retrofit2.Response;
 public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHolder> {
     ArrayList<GioHang> gioHangArrayList;
     Context context;
+    SessionManagement sessionManagement;
 
 
     public GioHangAdapter(ArrayList<GioHang> gioHangArrayList, Context context) {
@@ -57,11 +59,12 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
                     .error(R.drawable.error_black_48x48)
                     .into(holder.imgv_hinh);
         }
-
+        sessionManagement = new SessionManagement(context);
         holder.cb_chon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    sessionManagement.saveCheck(isChecked);
                     holder.tv_soluong.setText(gioHang.getSoLuong());
                     DataService dataService = APIService.getService();
                     Call<String> callback = dataService.insertDataCTHD(gioHang.getIDMonAn(), gioHang.getSoLuong(), gioHang.getGiaMonAn(), gioHang.getGiaMonAn());
@@ -101,7 +104,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     String ketqua1 = response.body();
                                     if (ketqua1.equals("Success")) {
-                                        Toast.makeText(context, "bạn đã sử số lượng ", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "bạn đã sửa số lượng ", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, "Lỗi ", Toast.LENGTH_SHORT).show();
                                     }
@@ -171,6 +174,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
                     });
 
                 } else {
+                    sessionManagement.saveCheck(false);
                     holder.btn_giam.setEnabled(false);
                     holder.btn_tang.setEnabled(false);
                     holder.tv_gia.setText(gioHang.getGiaMonAn());
@@ -209,7 +213,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
         ImageButton btn_giam, btn_tang;
         ImageView imgv_hinh;
         CheckBox cb_chon;
-        Button btn_chot;
+
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -221,9 +225,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.viewHold
             btn_giam = itemView.findViewById(R.id.btn_giam);
             btn_tang = itemView.findViewById(R.id.btn_tang);
 
-            // btn_chot = itemView.findViewById(R.id.btn_chot);
             imgv_hinh = itemView.findViewById(R.id.imgv_anh);
-
 
         }
     }

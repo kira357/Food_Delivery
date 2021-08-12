@@ -40,7 +40,7 @@ public class TimKiemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         init();
         TimkiemDiaDiem();
-        setEvent();
+        //setEvent();
         setToolbar();
     }
 
@@ -118,10 +118,6 @@ public class TimKiemActivity extends AppCompatActivity {
         lv_diadiem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DiaDiem diaDiem = diaDiemArrayList.get(position);
-                Intent intent = new Intent(TimKiemActivity.this, ChiTietDiaDiemActivity.class);
-                intent.putExtra("DiaDiem", diaDiem);
-                startActivity(intent);
 
             }
         });

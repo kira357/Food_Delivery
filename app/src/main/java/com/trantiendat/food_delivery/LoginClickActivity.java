@@ -95,11 +95,12 @@ public class LoginClickActivity extends AppCompatActivity {
         tv_resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginClickActivity.this,ResetPasswordActivity.class);
+                Intent intent = new Intent(LoginClickActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
             }
         });
     }
+
 
     private void Login(String user, String password) {
         DataService dataService = APIService.getService();
@@ -110,27 +111,31 @@ public class LoginClickActivity extends AppCompatActivity {
                 ArrayList<User> userArrayList = response.body();
                 if (userArrayList != null) {
                     if (ckb_rememberPass.isChecked()) {
-                        for(int i = 0 ; i < userArrayList.size() ; i ++){
+                        for (int i = 0; i < userArrayList.size(); i++) {
                             User userInfo = userArrayList.get(i);
-                        sessionManagement.saveUser(userInfo);
+                            sessionManagement.saveUser(userInfo);
                         }
                         sessionManagement.saveSession(true);
-                        Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Intent intent = new Intent(LoginClickActivity.this, MainMenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                       // onBackPressed();
+
                     } else {
-                        for(int i = 0 ; i < userArrayList.size() ; i ++){
+                        for (int i = 0; i < userArrayList.size(); i++) {
                             User userInfo = userArrayList.get(i);
                             sessionManagement.saveUser(userInfo);
                         }
                         sessionManagement.saveSession(false);
-                        Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Intent intent = new Intent(LoginClickActivity.this, MainMenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
+
+                    Intent intent = new Intent(LoginClickActivity.this, MainMenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     Toast.makeText(LoginClickActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(LoginClickActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
                 }
 
@@ -139,18 +144,18 @@ public class LoginClickActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ArrayList<User>> call, Throwable t) {
                 Toast t1 = Toast.makeText(LoginClickActivity.this, "Vui lòng kiểm tra mật khẩu", Toast.LENGTH_SHORT);
-                t1.setGravity(Gravity.CENTER,0,0);
+                t1.setGravity(Gravity.CENTER, 0, 0);
                 t1.show();
             }
         });
     }
 
     private void CheckLogin() {
-        if (!sessionManagement.Check()) {
+        if (!sessionManagement.CheckLogin()) {
             Toast.makeText(this, "vui Long dang nhap", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(LoginClickActivity.this,MainMenuActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent = new Intent(LoginClickActivity.this, MainMenuActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }

@@ -1,6 +1,7 @@
 package com.trantiendat.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.trantiendat.Model.DiaDiem;
+import com.trantiendat.food_delivery.ChiTietDiaDiemActivity;
 import com.trantiendat.food_delivery.R;
+import com.trantiendat.food_delivery.TimKiemActivity;
 
 import java.util.ArrayList;
 
@@ -67,6 +70,17 @@ public class TimKiemAdapter extends BaseAdapter {
         Glide.with(context).load(diaDiem.getHinhDiaDiem()).placeholder(R.drawable.loop_black_48x48)
                 .error(R.drawable.error_black_48x48)
                 .into(holder.imgv_location);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DiaDiem diaDiem = diaDiemArrayList.get(position);
+                Intent intent = new Intent(context, ChiTietDiaDiemActivity.class);
+                intent.putExtra("DiaDiem", diaDiem);
+                context.startActivity(intent);
+
+            }
+        });
         return convertView;
     }
 }

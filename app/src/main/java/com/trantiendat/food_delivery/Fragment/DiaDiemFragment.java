@@ -2,12 +2,14 @@ package com.trantiendat.food_delivery.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,12 @@ public class DiaDiemFragment extends Fragment {
 
     LinearLayoutManager linearLayoutManager;
     View view;
-
+//    boolean isLoading = false, limitData = false;
+//
+//    myHandler handler;
+//
+//
+//    int page = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,15 +92,17 @@ public class DiaDiemFragment extends Fragment {
         callback.enqueue(new Callback<List<DiaDiem>>() {
             @Override
             public void onResponse(Call<List<DiaDiem>> call, Response<List<DiaDiem>> response) {
-                diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
-                progressBar.setVisibility(View.GONE);
-                diaDiemAdapter = new DiaDiemAdapter(diaDiemArrayList, getActivity());
-                linearLayoutManager = new LinearLayoutManager(getActivity());
-                rcv_DiaDiem.setLayoutManager(linearLayoutManager);
-                rcv_DiaDiem.setHasFixedSize(true);
-                rcv_DiaDiem.setAdapter(diaDiemAdapter);
-                diaDiemAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+                if(response !=null && response.body().size()>0){
+                    diaDiemArrayList = (ArrayList<DiaDiem>) response.body();
+                    progressBar.setVisibility(View.GONE);
+                    diaDiemAdapter = new DiaDiemAdapter(diaDiemArrayList, getActivity());
+                    linearLayoutManager = new LinearLayoutManager(getActivity());
+                    rcv_DiaDiem.setLayoutManager(linearLayoutManager);
+                    rcv_DiaDiem.setHasFixedSize(true);
+                    rcv_DiaDiem.setAdapter(diaDiemAdapter);
+                    diaDiemAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
 
             }
 

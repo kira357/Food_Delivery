@@ -1,5 +1,8 @@
 package com.trantiendat.food_delivery.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ import com.trantiendat.Model.DiaDiem;
 import com.trantiendat.Model.YeuThich;
 import com.trantiendat.Service.APIService;
 import com.trantiendat.Service.DataService;
+import com.trantiendat.food_delivery.LoginClickActivity;
 import com.trantiendat.food_delivery.R;
 
 import java.util.ArrayList;
@@ -43,12 +47,6 @@ public class FavouriteFragment extends Fragment {
     private Database database;
     private ProgressBar progress_barYeuThich;
     private TextView tv_mess;
-
-
-    public FavouriteFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,31 +81,45 @@ public class FavouriteFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                int checkid;
-                checkid = Integer.parseInt(diaDiemArrayList.get(position).getIDDiaDiem());
-                database.QueryData("DELETE FROM YeuThich WHERE ID= " + checkid);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Bạn có chắc là muốn bỏ yêu thích !!!")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int position = viewHolder.getAdapterPosition();
+                                int checkid;
+                                checkid = Integer.parseInt(diaDiemArrayList.get(position).getIDDiaDiem());
+                                database.QueryData("DELETE FROM YeuThich WHERE ID= " + checkid);
 
-                DataService dataService = APIService.getService();
-                Call<String> callback = dataService.suaYeuThich(diaDiemArrayList.get(position).getIDDiaDiem(), -1);
-                callback.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        String ketqua = response.body();
-                        if (ketqua.equals("Success")) {
-                            Toast.makeText(getActivity(), "đã bỏ lưu", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "lỗi", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                                DataService dataService = APIService.getService();
+                                Call<String> callback = dataService.suaYeuThich(diaDiemArrayList.get(position).getIDDiaDiem(), -1);
+                                callback.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        String ketqua = response.body();
+                                        if (ketqua.equals("Success")) {
+                                            Toast.makeText(getActivity(), "đã bỏ lưu", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getActivity(), "lỗi", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
 
-                    }
-                });
-                diaDiemArrayList.remove(position);
-                yeuThichAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                                diaDiemArrayList.remove(position);
+                                yeuThichAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                yeuThichAdapter.notifyDataSetChanged();
+                            }
+                        });
+                builder.create().show();
+
 
             }
         };
@@ -126,7 +138,7 @@ public class FavouriteFragment extends Fragment {
                     rcv_yeuthich.setAdapter(yeuThichAdapter);
                     tv_mess.setVisibility(View.GONE);
                     progress_barYeuThich.setVisibility(View.GONE);
-                }else {
+                } else {
                     tv_mess.setVisibility(View.VISIBLE);
                     progress_barYeuThich.setVisibility(View.GONE);
                 }
